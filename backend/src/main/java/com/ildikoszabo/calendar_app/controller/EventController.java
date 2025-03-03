@@ -12,21 +12,17 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/events")
 public class EventController {
-    private EventService eventService;
+    private final EventService eventService;
 
     public EventController(EventService eventService) {
         this.eventService = eventService;
     }
 
-    @PostMapping("/save")
-    public ResponseEntity<String> saveEvent(@RequestBody Event theEvent) {
+    @PostMapping
+    public ResponseEntity<Event> saveEvent(@RequestBody Event event) {
 
+        eventService.save(event);
 
-        System.out.println(theEvent);
-
-        // save the event
-        eventService.save(theEvent);
-
-        return ResponseEntity.ok("redirect:/events/save");
+        return ResponseEntity.ok(event);
     }
 }
