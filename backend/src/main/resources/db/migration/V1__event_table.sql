@@ -3,5 +3,5 @@ CREATE TABLE events (
     user_id BIGINT NOT NULL,
     start_at DATETIME NOT NULL,
     end_at DATETIME NOT NULL,
-    event_text TEXT NOT NULL
+    event_text VARCHAR(200) NOT NULL
 );

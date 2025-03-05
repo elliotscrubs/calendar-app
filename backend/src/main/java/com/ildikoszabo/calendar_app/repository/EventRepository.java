@@ -9,6 +9,4 @@ import java.math.BigInteger;
 @Repository
 public interface EventRepository extends JpaRepository<Event, BigInteger> {
 
-
-
 }

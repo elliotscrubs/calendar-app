@@ -1,10 +1,8 @@
 package com.ildikoszabo.calendar_app.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-
 
 @Entity
 @Table(name="events")
@@ -16,29 +14,27 @@ public class Event {
     private BigInteger id;
 
     @Column(name="user_id", nullable = false)
-    private BigInteger user_id;
+    private BigInteger userId;
 
     @Column(name="start_at", nullable = false)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime start_at;
+    private LocalDateTime startAt;
 
     @Column(name="end_at", nullable = false)
-    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime end_at;
+    private LocalDateTime endAt;
 
     @Column(name="event_text", nullable = false)
-    private String event_text;
+    private String eventText;
 
     public Event() {
 
     }
 
-    public Event(BigInteger id, BigInteger user_id, LocalDateTime start_at, LocalDateTime end_at, String event_text) {
+    public Event(BigInteger id, BigInteger userId, LocalDateTime startAt, LocalDateTime endAt, String eventText) {
         this.id = id;
-        this.user_id = user_id;
-        this.start_at = start_at;
-        this.end_at = end_at;
-        this.event_text = event_text;
+        this.userId = userId;
+        this.startAt = startAt;
+        this.endAt = endAt;
+        this.eventText = eventText;
     }
 
     public BigInteger getId() {
@@ -49,46 +45,46 @@ public class Event {
         this.id = id;
     }
 
-    public BigInteger getUser_id() {
-        return user_id;
+    public BigInteger getUserId() {
+        return userId;
     }
 
-    public void setUser_id(BigInteger user_id) {
-        this.user_id = user_id;
+    public void setUserId(BigInteger userId) {
+        this.userId = userId;
     }
 
-    public LocalDateTime getStart_at() {
-        return start_at;
+    public LocalDateTime getStartAt() {
+        return startAt;
     }
 
-    public void setStart_at(LocalDateTime start_at) {
-        this.start_at = start_at;
+    public void setStartAt(LocalDateTime startAt) {
+        this.startAt = startAt;
     }
 
-    public LocalDateTime getEnd_at() {
-        return end_at;
+    public LocalDateTime getEndAt() {
+        return endAt;
     }
 
-    public void setEnd_at(LocalDateTime end_at) {
-        this.end_at = end_at;
+    public void setEndAt(LocalDateTime endAt) {
+        this.endAt = endAt;
     }
 
-    public String getEvent_text() {
-        return event_text;
+    public String getEventText() {
+        return eventText;
     }
 
-    public void setEvent_text(String event_text) {
-        this.event_text = event_text;
+    public void setEventText(String eventText) {
+        this.eventText = eventText;
     }
 
     @Override
     public String toString() {
         return "Events{" +
-                "id=" + id +
-                ", user_id=" + user_id +
-                ", start_at=" + start_at +
-                ", end_at=" + end_at +
-                ", event_text=" + event_text +
+                "Id=" + id +
+                ", userId=" + userId +
+                ", startAt=" + startAt +
+                ", endAt=" + endAt +
+                ", eventText=" + eventText +
                 '}';
     }
 }
