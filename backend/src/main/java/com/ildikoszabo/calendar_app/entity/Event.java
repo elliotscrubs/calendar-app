@@ -1,6 +1,7 @@
 package com.ildikoszabo.calendar_app.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
 
@@ -23,6 +24,7 @@ public class Event {
     private LocalDateTime endAt;
 
     @Column(name="event_text", nullable = false)
+    @Size(min = 5, max = 200, message = "The event text can be a minimum of 5 and a maximum of 500 characters long!!")
     private String eventText;
 
     public Event() {

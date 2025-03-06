@@ -2,7 +2,9 @@ package com.ildikoszabo.calendar_app.controller;
 
 import com.ildikoszabo.calendar_app.entity.Event;
 import com.ildikoszabo.calendar_app.service.EventService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,11 +21,12 @@ public class EventController {
     }
 
     @PostMapping
-    public ResponseEntity<Event> saveEvent(@RequestBody Event event) {
+    public ResponseEntity<?> saveEvent(@Valid @RequestBody Event event, BindingResult result) {
+        if (result.hasErrors()) {
+            return ResponseEntity.badRequest().body(result.getAllErrors());
+        }
 
-        System.out.println(event);
         eventService.save(event);
-
         return ResponseEntity.ok(event);
     }
 }
