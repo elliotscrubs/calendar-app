@@ -1,9 +1,9 @@
 // fooldal helye (localhost::3000)
-'use client';
+"use client";
 
 import dynamic from 'next/dynamic';
 
-const MyTimePicker = dynamic(() => import('@/app/components/TimeInput'), {
+const MyTimePicker = dynamic(() => import('@/app/components/TimePicker'), {
   ssr: false,
 });
 

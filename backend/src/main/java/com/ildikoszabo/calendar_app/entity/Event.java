@@ -15,7 +15,7 @@ public class Event {
     private BigInteger id;
 
     @Column(name="user_id", nullable = false)
-    private BigInteger userId;
+    private BigInteger userId; // Todo: do not return internal server error if missing from request
 
     @Column(name="start_at", nullable = false)
     private LocalDateTime startAt;
