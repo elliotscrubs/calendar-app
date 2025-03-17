@@ -6,41 +6,29 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Box, Button, TextField } from '@mui/material';
-import axios from 'axios';
-import dayjs, { Dayjs } from 'dayjs';
+import { Dayjs } from 'dayjs';
+import { apiClient, CreateEventRequest } from '../api/apiClient';
 
-const TIME_FORMAT = 'HH:mm';
-
-const EventFunction = () => {
+const CreateEventModal = () => {
   const [startAt, setStartAt] = React.useState<Dayjs | null>(null);
   const [endAt, setEndAt] = React.useState<Dayjs | null>(null);
   const [eventText, setEventText] = React.useState('');
 
-   const formattedDate = dayjs().format('YYYY-MM-DD');
-   const formattedStartAt = startAt ? `${formattedDate}T${startAt.format(TIME_FORMAT)}:00` : null;
-   const formattedEndAt = endAt ? `${formattedDate}T${endAt.format(TIME_FORMAT)}:00` : null;
+  const handleSubmit = async () => {
+    if (!startAt || !endAt || !eventText) return;
 
- 
-  const fetchData = async () => {
+    const newEvent: CreateEventRequest = {
+      userId: 0,
+      startAt:  startAt.toDate(), 
+      endAt:  endAt.toDate(), 
+      eventText: eventText
+    };
+
     try {
-      const response = await axios.post(
-        'http://localhost:9090/events',
-        {
-          userId: 0,
-          startAt: formattedStartAt,
-          endAt: formattedEndAt,
-          eventText: eventText,
-        },
-        { timeout: 10000 }
-      );
-
-      console.log('Backend response:', response.data);
-
-      setStartAt(dayjs(response.data.startAt, TIME_FORMAT));
-      setEndAt(dayjs(response.data.endAt, TIME_FORMAT));
-      setEventText(response.data.eventText);
+      apiClient.post(newEvent);
+      alert("Event created successfully");
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Failed to submit:", error);
     }
   };
 
@@ -85,7 +73,7 @@ const EventFunction = () => {
 
       <Button
         variant='contained'
-        onClick={fetchData}
+        onClick={handleSubmit}
         sx={{ m: 1, width: '30ch' }}>
         Save event
       </Button>
@@ -93,4 +81,4 @@ const EventFunction = () => {
   );
 };
 
-export default EventFunction;
+export default CreateEventModal;

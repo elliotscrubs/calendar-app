@@ -3,7 +3,7 @@
 
 import dynamic from 'next/dynamic';
 
-const MyTimePicker = dynamic(() => import('@/app/components/TimePicker'), {
+const MyTimePicker = dynamic(() => import('@/app/components/CreateEventModal'), {
   ssr: false,
 });
 
