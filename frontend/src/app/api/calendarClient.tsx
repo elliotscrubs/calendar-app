@@ -15,7 +15,7 @@ export interface Event {
     eventText: string;
 }
 
-class ApiClient {
+class CalendarClient {
     private axiosInstance: AxiosInstance;
 
     constructor(baseURL: string) {
@@ -27,10 +27,10 @@ class ApiClient {
         });
     }   
 
-    async post(data: CreateEventRequest): Promise<Event> {
+    async createEvent(data: CreateEventRequest): Promise<Event> {
         const response = await this.axiosInstance.post<Event>("/events", data);
         return response.data;
     }
 }
 
-export const apiClient = new ApiClient('http://localhost:9090');
+export const calendarClient = new CalendarClient('http://localhost:9090');

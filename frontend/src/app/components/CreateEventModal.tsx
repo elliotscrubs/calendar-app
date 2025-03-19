@@ -7,7 +7,9 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Box, Button, TextField } from '@mui/material';
 import { Dayjs } from 'dayjs';
-import { apiClient, CreateEventRequest } from '../api/apiClient';
+import { calendarClient, CreateEventRequest } from '../api/calendarClient';
+import { toast, ToastContainer } from 'material-react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const CreateEventModal = () => {
   const [startAt, setStartAt] = React.useState<Dayjs | null>(null);
@@ -15,20 +17,31 @@ const CreateEventModal = () => {
   const [eventText, setEventText] = React.useState('');
 
   const handleSubmit = async () => {
-    if (!startAt || !endAt || !eventText) return;
+    if (!startAt || !endAt || eventText.length < 5 || eventText.length > 200) {
 
-    const newEvent: CreateEventRequest = {
-      userId: 0,
-      startAt:  startAt.toDate(), 
-      endAt:  endAt.toDate(), 
-      eventText: eventText
-    };
+    } else {
+      const newEvent: CreateEventRequest = {
+        userId: 0,
+        startAt: startAt.toDate(),
+        endAt: endAt.toDate(),
+        eventText: eventText,
+      };
 
-    try {
-      apiClient.post(newEvent);
-      alert("Event created successfully");
-    } catch (error) {
-      console.error("Failed to submit:", error);
+      try {
+        calendarClient.createEvent(newEvent);
+        toast.success('Event created successfully! 🦄', {
+          position: 'top-center',
+          autoClose: 3000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: 'dark',
+        });
+      } catch (error) {
+        console.error('Failed to submit:', error);
+      }
     }
   };
 
@@ -73,10 +86,14 @@ const CreateEventModal = () => {
 
       <Button
         variant='contained'
+        disabled={
+          !startAt || !endAt || eventText.length < 5 || eventText.length > 200
+        }
         onClick={handleSubmit}
         sx={{ m: 1, width: '30ch' }}>
         Save event
       </Button>
+    <ToastContainer />
     </Box>
   );
 };

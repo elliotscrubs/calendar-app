@@ -10,8 +10,8 @@ const MyTimePicker = dynamic(() => import('@/app/components/CreateEventModal'), 
 
 export default function Page() {
   return (
-    <main>
+    <div>
       <MyTimePicker />
-    </main>
+    </div>
   );
 }

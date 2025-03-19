@@ -15,9 +15,11 @@
     "@mui/x-date-pickers": "^7.27.3",
     "axios": "^1.8.2",
     "dayjs": "^1.11.13",
+    "material-react-toastify": "^10.0.5",
     "next": "^15.2.1",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "react-toastify": "^11.0.5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
