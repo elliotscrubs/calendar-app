@@ -18,7 +18,8 @@ const CreateEventModal = () => {
 
   const handleSubmit = async () => {
     if (!startAt || !endAt || eventText.length < 5 || eventText.length > 200) {
-
+      return;
+      
     } else {
       const newEvent: CreateEventRequest = {
         userId: 0,
@@ -42,7 +43,7 @@ const CreateEventModal = () => {
       } catch (error) {
         console.error('Failed to submit:', error);
       }
-    }
+    }  
   };
 
   return (
@@ -86,9 +87,7 @@ const CreateEventModal = () => {
 
       <Button
         variant='contained'
-        disabled={
-          !startAt || !endAt || eventText.length < 5 || eventText.length > 200
-        }
+        disabled={(!startAt || !endAt || eventText.length < 5 || eventText.length > 200)}
         onClick={handleSubmit}
         sx={{ m: 1, width: '30ch' }}>
         Save event
