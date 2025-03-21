@@ -5,6 +5,8 @@ import com.ildikoszabo.calendar_app.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class EventServiceImplements implements EventService {
     private EventRepository eventRepository;
@@ -15,8 +17,10 @@ public class EventServiceImplements implements EventService {
     }
 
     @Override
-    public void save(Event theEvent) {
-
-        eventRepository.save(theEvent);
+    public Event save(Event theEvent) {
+        if (theEvent.getUserId() == null) {
+            theEvent.setUserId(UUID.randomUUID());
+        }
+            return eventRepository.save(theEvent);
     }
 }

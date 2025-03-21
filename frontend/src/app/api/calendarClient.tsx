@@ -1,15 +1,16 @@
 import axios, { AxiosInstance } from "axios";
+type UUID = string;
 
 export interface CreateEventRequest {
-    userId: number;
+    userId: UUID;
     startAt: Date;
     endAt: Date;
     eventText: string;
 }
 
 export interface Event {
-    id: number;
-    userId: number;
+    id: UUID;
+    userId: UUID;
     startAt: Date;
     endAt: Date;
     eventText: string;

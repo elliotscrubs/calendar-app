@@ -8,26 +8,42 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Box, Button, TextField } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import { calendarClient, CreateEventRequest } from '../api/calendarClient';
-import { toast, ToastContainer } from 'material-react-toastify';
+import { toast } from 'material-react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { v4 as uuidv4 } from 'uuid'; 
+
 
 const CreateEventModal = () => {
   const [startAt, setStartAt] = React.useState<Dayjs | null>(null);
   const [endAt, setEndAt] = React.useState<Dayjs | null>(null);
   const [eventText, setEventText] = React.useState('');
 
-  const handleSubmit = async () => {
+  function getCreateEventRequest(
+    startAt: Dayjs | null,
+    endAt: Dayjs | null,
+    eventText: string
+  ): CreateEventRequest | null {
     if (!startAt || !endAt || eventText.length < 5 || eventText.length > 200) {
-      return;
-      
+      return null;
     } else {
-      const newEvent: CreateEventRequest = {
-        userId: 0,
+      return {
+        userId: uuidv4(),
         startAt: startAt.toDate(),
         endAt: endAt.toDate(),
         eventText: eventText,
       };
+    }
+  }
 
+  const handleSubmit = async () => {
+    const newEvent: CreateEventRequest | null = getCreateEventRequest(
+      startAt,
+      endAt,
+      eventText
+    );
+    if (!newEvent) {
+      return;
+    } else {
       try {
         calendarClient.createEvent(newEvent);
         toast.success('Event created successfully! 🦄', {
@@ -43,7 +59,7 @@ const CreateEventModal = () => {
       } catch (error) {
         console.error('Failed to submit:', error);
       }
-    }  
+    }
   };
 
   return (
@@ -77,6 +93,9 @@ const CreateEventModal = () => {
       </LocalizationProvider>
 
       <TextField
+        required
+        error={eventText.length < 5 || eventText.length > 200}
+        helperText={eventText.length ? 'min 5, max 200' : ''}
         slotProps={{ htmlInput: { maxLength: 200 } }}
         label='Event Text'
         variant='outlined'
@@ -87,12 +106,11 @@ const CreateEventModal = () => {
 
       <Button
         variant='contained'
-        disabled={(!startAt || !endAt || eventText.length < 5 || eventText.length > 200)}
+        disabled={!getCreateEventRequest(startAt, endAt, eventText)}
         onClick={handleSubmit}
         sx={{ m: 1, width: '30ch' }}>
         Save event
       </Button>
-    <ToastContainer />
     </Box>
   );
 };
