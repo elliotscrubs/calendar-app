@@ -28,7 +28,7 @@ const CreateEventModal = () => {
   const handleSubmit = async () => {
     if (isInvalid(startAt, endAt, eventText)) {
       return;
-    } else {
+    } {
       const newEvent = {
         userId: uuidv4(),
         startAt: startAt!.toDate(),
