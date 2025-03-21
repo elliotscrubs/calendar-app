@@ -28,29 +28,29 @@ const CreateEventModal = () => {
   const handleSubmit = async () => {
     if (isInvalid(startAt, endAt, eventText)) {
       return;
-    } {
-      const newEvent = {
-        userId: uuidv4(),
-        startAt: startAt!.toDate(),
-        endAt: endAt!.toDate(),
-        eventText: eventText,
-      };
+    }
 
-      try {
-        calendarClient.createEvent(newEvent);
-        toast.success('Event created successfully! 🦄', {
-          position: 'top-center',
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: 'dark',
-        });
-      } catch (error) {
-        console.error('Failed to submit:', error);
-      }
+    const newEvent = {
+      userId: uuidv4(),
+      startAt: startAt!.toDate(),
+      endAt: endAt!.toDate(),
+      eventText: eventText,
+    };
+
+    try {
+      calendarClient.createEvent(newEvent);
+      toast.success('Event created successfully! 🦄', {
+        position: 'top-center',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      });
+    } catch (error) {
+      console.error('Failed to submit:', error);
     }
   };
 
