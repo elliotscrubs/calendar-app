@@ -2,20 +2,20 @@ package com.ildikoszabo.calendar_app.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.UUID;
 
 @Entity
 @Table(name="events")
 public class Event {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name="id")
-    private BigInteger id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name="id", updatable = false, nullable = false)
+    private UUID id;
 
     @Column(name="user_id", nullable = false)
-    private BigInteger userId;
+    private UUID userId; // Todo: do not return internal server error if missing from request
 
     @Column(name="start_at", nullable = false)
     private LocalDateTime startAt;
@@ -31,7 +31,7 @@ public class Event {
 
     }
 
-    public Event(BigInteger id, BigInteger userId, LocalDateTime startAt, LocalDateTime endAt, String eventText) {
+    public Event(UUID id, UUID userId, LocalDateTime startAt, LocalDateTime endAt, String eventText) {
         this.id = id;
         this.userId = userId;
         this.startAt = startAt;
@@ -39,19 +39,19 @@ public class Event {
         this.eventText = eventText;
     }
 
-    public BigInteger getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(BigInteger id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
-    public BigInteger getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(BigInteger userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
