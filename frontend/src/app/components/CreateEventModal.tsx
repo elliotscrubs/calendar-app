@@ -7,43 +7,35 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Box, Button, TextField } from '@mui/material';
 import { Dayjs } from 'dayjs';
-import { calendarClient, CreateEventRequest } from '../api/calendarClient';
+import { calendarClient } from '../api/calendarClient';
 import { toast } from 'material-react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { v4 as uuidv4 } from 'uuid'; 
-
+import { v4 as uuidv4 } from 'uuid';
 
 const CreateEventModal = () => {
   const [startAt, setStartAt] = React.useState<Dayjs | null>(null);
   const [endAt, setEndAt] = React.useState<Dayjs | null>(null);
   const [eventText, setEventText] = React.useState('');
 
-  function getCreateEventRequest(
+  function isInvalid(
     startAt: Dayjs | null,
     endAt: Dayjs | null,
     eventText: string
-  ): CreateEventRequest | null {
-    if (!startAt || !endAt || eventText.length < 5 || eventText.length > 200) {
-      return null;
-    } else {
-      return {
-        userId: uuidv4(),
-        startAt: startAt.toDate(),
-        endAt: endAt.toDate(),
-        eventText: eventText,
-      };
-    }
+  ): boolean {
+    return !startAt || !endAt || eventText.length < 5 || eventText.length > 200;
   }
 
   const handleSubmit = async () => {
-    const newEvent: CreateEventRequest | null = getCreateEventRequest(
-      startAt,
-      endAt,
-      eventText
-    );
-    if (!newEvent) {
+    if (isInvalid(startAt, endAt, eventText)) {
       return;
     } else {
+      const newEvent = {
+        userId: uuidv4(),
+        startAt: startAt!.toDate(),
+        endAt: endAt!.toDate(),
+        eventText: eventText,
+      };
+
       try {
         calendarClient.createEvent(newEvent);
         toast.success('Event created successfully! 🦄', {
@@ -106,7 +98,7 @@ const CreateEventModal = () => {
 
       <Button
         variant='contained'
-        disabled={!getCreateEventRequest(startAt, endAt, eventText)}
+        disabled={isInvalid(startAt, endAt, eventText)}
         onClick={handleSubmit}
         sx={{ m: 1, width: '30ch' }}>
         Save event

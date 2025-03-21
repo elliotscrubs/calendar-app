@@ -1,0 +1,1 @@
+-- SELECT BIN_TO_UUID(id), BIN_TO_UUID(user_id), start_at, end_at, event_text FROM events;
