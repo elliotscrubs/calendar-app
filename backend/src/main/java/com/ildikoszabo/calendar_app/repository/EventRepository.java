@@ -16,5 +16,3 @@ public interface EventRepository extends JpaRepository<Event, BigInteger> {
 	List<Event> findByStartAtAndEndAtAndUserId(@Param("fromDate") LocalDateTime fromDate,
 											   @Param("toDate") LocalDateTime toDate, UUID userId);
 }
-
-
