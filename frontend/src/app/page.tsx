@@ -9,8 +9,8 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Paper
-  } from '@mui/material';
+  Paper,
+} from '@mui/material';
 import EventCard from './components/EventCard';
 
 const weekdays = [
@@ -38,22 +38,24 @@ const EventsTable = () => {
   }, []);
 
   async function loadData() {
+    const monday: Date = new Date();
+    monday.setDate(monday.getDate() - monday.getDay() + 1);
+
+    const sunday: Date = new Date();
+    sunday.setDate(sunday.getDate() - sunday.getDay() + 7);
+
     const eventTest = calendarClient.displayEvents(
       '00000300-0000-0000-0000-000000000000',
-      new Date('2025-03-13'),
-      new Date('2025-04-13')
-    );    
+      monday,
+      sunday
+    );
     setEvents(await eventTest);
   }
 
-  const dayOfWeek = new Date("2025-03-13"); 
-  console.log(dayOfWeek.getDay()); 
-
-  
   return (
     <TableContainer
       component={Paper}
-      sx={{ maxWidth: 1500, margin: 'auto', borderRadius: 3, mt: 4 }}>
+      sx={{ maxWidth: 1600, margin: 'auto', borderRadius: 3, mt: 4 }}>
       <Table>
         <TableHead>
           <TableRow>
@@ -76,18 +78,21 @@ const EventsTable = () => {
         <TableBody>
           <TableRow>
             {weekdays.map((dayName, index) => (
-              // weekdays.map((dayName, index) => console.log((index + 1) % 7));      ==    (dayOfWeek.getDay())
               <TableCell
                 key={index}
                 align='center'
                 style={{
+                  padding: '8px',
                   borderRight:
                     index === weekdays.length - 1 ? 'none' : '1px solid #ccc',
                 }}>
-                { // itt az Object.values(events).flat() reszt ki kene cserelni valamire ami kiszedi az events-bol (ami az api valasz) az adott napra tartozo event listat
-                Object.values(events).flat().map((event, eventIndex) => (
-                      <EventCard key={eventIndex} event={event} />
-                    ))}
+                {Object.keys(events)
+                  .filter(date => (index + 1) % 7 == new Date(date).getDay())
+                  .map(date => events[date])
+                  .flat()
+                  .map((event, eventIndex) => (
+                    <EventCard key={eventIndex} event={event} />
+                  ))}
               </TableCell>
             ))}
           </TableRow>
