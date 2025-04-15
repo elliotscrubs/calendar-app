@@ -64,6 +64,8 @@ const EventsTable = () => {
                 key={index}
                 align='center'
                 style={{
+                  width: '14.28%',
+                  verticalAlign: 'top',
                   ...cellStyle,
                   borderRight:
                     index === weekdays.length - 1
@@ -82,6 +84,8 @@ const EventsTable = () => {
                 key={index}
                 align='center'
                 style={{
+                  width: '14.28%',
+                  verticalAlign: 'top',
                   padding: '8px',
                   borderRight:
                     index === weekdays.length - 1 ? 'none' : '1px solid #ccc',

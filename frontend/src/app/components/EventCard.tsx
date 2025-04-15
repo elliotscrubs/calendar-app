@@ -12,7 +12,8 @@ const EventCard = (props: { event: Event }) => {
       color: 'white',
       backgroundColor: '#E9967A',
       borderRadius: 4,
-      fontSize: '1rem'
+      fontSize: '1rem',
+      marginBottom: '8px'
     }}>            
         {props.event.startAt.toString().split('T')[1]} -
         {props.event.endAt.toString().split('T')[1]}
