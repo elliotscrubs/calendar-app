@@ -19,7 +19,6 @@ export interface Event {
 export type ByDateResponse = Record<string, Event[]>;
 // Date format = "yyyy-MM-dd";
 
-
 function formatDate(date: Date): string {
   const offset = date.getTimezoneOffset()
   const offsetApplied = new Date(date.getTime() - (offset*60*1000))

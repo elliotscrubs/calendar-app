@@ -1,7 +1,8 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { ByDateResponse, calendarClient } from './api/calendarClient';
-
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
 import {
   Table,
   TableBody,
@@ -38,14 +39,12 @@ const EventsTable = () => {
   }, []);
 
   async function loadData() {
-    const monday: Date = new Date();
-    monday.setDate(monday.getDate() - monday.getDay() + 1);
-
-    const sunday: Date = new Date();
-    sunday.setDate(sunday.getDate() - sunday.getDay() + 7);
+      dayjs.extend(isoWeek);
+      const monday: Date = dayjs().isoWeekday(1).toDate();
+      const sunday: Date = dayjs().isoWeekday(7).toDate();
 
     const eventTest = calendarClient.getEvents(
-      '00000300-0000-0000-0000-000000000000',
+      '00000300-0000-0000-0000-000000000000',      
       monday,
       sunday
     );
@@ -91,7 +90,7 @@ const EventsTable = () => {
                     index === weekdays.length - 1 ? 'none' : '1px solid #ccc',
                 }}>
                 {Object.keys(events)
-                  .filter(date => (index + 1) % 7 == new Date(date).getDay())
+                  .filter(date => (index + 1) % 7 == dayjs(date).isoWeekday())
                   .map(date => events[date])
                   .flat()
                   .map((event, eventIndex) => (
