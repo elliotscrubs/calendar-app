@@ -17,6 +17,8 @@ export interface Event {
 }
 
 export type ByDateResponse = Record<string, Event[]>;
+// Date format = "yyyy-MM-dd";
+
 
 function formatDate(date: Date): string {
   const offset = date.getTimezoneOffset()
@@ -41,7 +43,7 @@ class CalendarClient {
     return response.data;
   }  
 
-  async displayEvents(userId: UUID, fromDate: Date, toDate: Date) {
+  async getEvents(userId: UUID, fromDate: Date, toDate: Date) {
     const response = await this.axiosInstance.get<ByDateResponse>('/events/byDate', {
       params: {        
         userId: userId,

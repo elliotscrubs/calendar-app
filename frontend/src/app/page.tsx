@@ -44,7 +44,7 @@ const EventsTable = () => {
     const sunday: Date = new Date();
     sunday.setDate(sunday.getDate() - sunday.getDay() + 7);
 
-    const eventTest = calendarClient.displayEvents(
+    const eventTest = calendarClient.getEvents(
       '00000300-0000-0000-0000-000000000000',
       monday,
       sunday
