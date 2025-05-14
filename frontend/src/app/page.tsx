@@ -1,4 +1,5 @@
 'use client';
+
 import React, { useEffect, useState } from 'react';
 import { ByDateResponse, calendarClient } from './api/calendarClient';
 import dayjs from 'dayjs';
@@ -12,7 +13,7 @@ import {
   TableRow,
   Paper,
 } from '@mui/material';
-import EventCard from './components/EventCard';
+import DayCell from './components/DayCell';
 
 const weekdays = [
   'Monday',
@@ -39,12 +40,12 @@ const EventsTable = () => {
   }, []);
 
   async function loadData() {
-      dayjs.extend(isoWeek);
-      const monday: Date = dayjs().isoWeekday(1).toDate();
-      const sunday: Date = dayjs().isoWeekday(7).toDate();
+    dayjs.extend(isoWeek);
+    const monday: Date = dayjs().isoWeekday(1).toDate();
+    const sunday: Date = dayjs().isoWeekday(7).toDate();
 
     const eventTest = calendarClient.getEvents(
-      '00000300-0000-0000-0000-000000000000',      
+      '00000300-0000-0000-0000-000000000000',
       monday,
       sunday
     );
@@ -89,13 +90,7 @@ const EventsTable = () => {
                   borderRight:
                     index === weekdays.length - 1 ? 'none' : '1px solid #ccc',
                 }}>
-                {Object.keys(events)
-                  .filter(date => (index + 1) % 7 == dayjs(date).isoWeekday())
-                  .map(date => events[date])
-                  .flat()
-                  .map((event, eventIndex) => (
-                    <EventCard key={eventIndex} event={event} />
-                  ))}
+                <DayCell index={index} events={events} />
               </TableCell>
             ))}
           </TableRow>
