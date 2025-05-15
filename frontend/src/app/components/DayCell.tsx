@@ -3,11 +3,12 @@
 import { useMemo } from 'react';
 import { ByDateResponse } from '../api/calendarClient';
 import EventCard from './EventCard';
+import dayjs from 'dayjs';
 
 const DayCell = (props: { index: number; events: ByDateResponse }) => {
   const eventsList = useMemo(() => {
     return Object.keys(props.events)
-      .filter(date => (props.index + 1) % 7 == new Date(date).getDay())
+      .filter(date => (props.index + 1) % 7 === dayjs(date).isoWeekday())
       .map(date => props.events[date])
       .flat();
   }, [props.index, props.events]);
