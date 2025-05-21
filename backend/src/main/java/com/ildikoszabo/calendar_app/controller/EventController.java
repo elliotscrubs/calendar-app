@@ -7,6 +7,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -16,43 +17,43 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/events")
 public class EventController {
-    private final EventService eventService;
+	private final EventService eventService;
 
-    public EventController(EventService eventService) {
-        this.eventService = eventService;
-    }
+	public EventController(EventService eventService) {
+		this.eventService = eventService;
+	}
 
-    @PostMapping
-    public ResponseEntity<?> saveEvent(@Valid @RequestBody Event event, BindingResult result) {
-        if (result.hasErrors()) {
-            return ResponseEntity.badRequest().body(result.getAllErrors());
-        }
+	@PostMapping
+	public ResponseEntity<?> saveEvent(@Valid @RequestBody Event event, BindingResult result) {
+		if (result.hasErrors()) {
+			return ResponseEntity.badRequest().body(result.getAllErrors());
+		}
 
-        eventService.save(event);
-        return ResponseEntity.ok(event);
-    }
+		eventService.save(event);
+		return ResponseEntity.ok(event);
+	}
 
-    @RequestMapping(method = RequestMethod.OPTIONS)
-    public void handleOptions() {
+	@RequestMapping(method = RequestMethod.OPTIONS)
+	public void handleOptions() {
 
-    }
+	}
 
-    @GetMapping("/byDate")
-    public ResponseEntity<Map<LocalDate, List<Event>>> getListByDate(
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
-            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate,
-            @RequestParam UUID userId) {
-        Map<LocalDate, List<Event>> allEvents = eventService.getListByDate(fromDate, toDate, userId);
-        return ResponseEntity.ok(allEvents);
-    }
+	@GetMapping("/byDate")
+	public ResponseEntity<Map<LocalDate, List<Event>>> getListByDate(
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate fromDate,
+			@RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate toDate,
+			@RequestParam UUID userId) {
+		Map<LocalDate, List<Event>> allEvents = eventService.getListByDate(fromDate, toDate, userId);
+		return ResponseEntity.ok(allEvents);
+	}
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteById(@PathVariable("id") UUID id){
-        Optional<Event> existingEvent = this.eventService.findById(id);
-        if(existingEvent.isPresent()){
-            this.eventService.deleteById(existingEvent.get().getId());
-            return ResponseEntity.ok().build();
-        }
-        return ResponseEntity.notFound().build();
-        }
-    }
+	@DeleteMapping("/{id}")
+	public ResponseEntity<String> deleteById(@PathVariable("id") UUID id) {
+		Optional<Event> existingEvent = this.eventService.findById(id);
+		if (existingEvent.isPresent()) {
+			this.eventService.deleteById(existingEvent.get().getId());
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.notFound().build();
+	}
+}
