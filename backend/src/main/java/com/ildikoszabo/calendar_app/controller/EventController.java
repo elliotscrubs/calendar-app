@@ -7,10 +7,10 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -45,4 +45,14 @@ public class EventController {
         Map<LocalDate, List<Event>> allEvents = eventService.getListByDate(fromDate, toDate, userId);
         return ResponseEntity.ok(allEvents);
     }
-}
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteById(@PathVariable("id") UUID id){
+        Optional<Event> existingEvent = this.eventService.findById(id);
+        if(existingEvent.isPresent()){
+            this.eventService.deleteById(existingEvent.get().getId());
+            return ResponseEntity.ok().build();
+        }
+        return ResponseEntity.notFound().build();
+        }
+    }
