@@ -11,8 +11,9 @@ import java.util.List;
 import java.util.UUID;
 
 @Repository
-public interface EventRepository extends JpaRepository<Event, BigInteger> {
+public interface EventRepository extends JpaRepository<Event, UUID> {
 	@Query("SELECT e FROM Event e WHERE startAt BETWEEN :fromDate AND :toDate")
 	List<Event> findByStartAtAndEndAtAndUserId(@Param("fromDate") LocalDateTime fromDate,
 											   @Param("toDate") LocalDateTime toDate, UUID userId);
+
 }

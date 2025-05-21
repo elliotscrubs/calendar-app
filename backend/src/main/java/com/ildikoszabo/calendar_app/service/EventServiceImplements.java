@@ -8,6 +8,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -33,5 +34,25 @@ public class EventServiceImplements implements EventService {
     public Map<LocalDate, List<Event>> getListByDate(LocalDate fromDate, LocalDate toDate, UUID userId) {
         return eventRepository.findByStartAtAndEndAtAndUserId(fromDate.atStartOfDay(), toDate.atTime(LocalTime.MAX), userId)
                 .stream().collect(Collectors.groupingBy((event) -> event.getStartAt().toLocalDate()));
+    }
+
+    @Override
+    public void deleteById(UUID id) {
+        this.eventRepository.deleteById(id);
+    }
+
+    @Override
+    public Optional<Event> findById(UUID id) {
+        Optional<Event> result = eventRepository.findById(id);
+
+        Event theEvent = null;
+
+        if (result.isPresent()) {
+            theEvent = result.get();
+        }
+        else {
+            throw new RuntimeException("Did not find Event id - " + id);
+        }
+        return Optional.of(theEvent);
     }
 }
