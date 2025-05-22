@@ -6,23 +6,33 @@ import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import dayjs from 'dayjs';
+import Swal from 'sweetalert2';
 
 const EventCard = (props: { event: Event }) => {
   const startTime = dayjs(props.event.startAt).format('HH:mm');
   const endTime = dayjs(props.event.endAt).format('HH:mm');
 
   const handleDelete = async () => {
-    console.log('Delete icon clicked');
-    const confirmed = window.confirm(
-      'Are you sure you want to delete this event?'
-    );
-    if (!confirmed) return;
-    try {
-      await calendarClient.deleteEvent(props.event.id);
-      alert('Event deleted.');
-    } catch (error) {
-      console.error('An error occurred during the request.', error);
-      alert('An error occurred during the request.');
+    const result = await Swal.fire({
+      title: 'Are you sure you want to delete this event?',
+      text: 'This event will be deleted!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes!',
+      cancelButtonText: 'No!',
+      width: '300px',
+    });
+
+    if (result.isConfirmed) {
+      try {
+        await calendarClient.deleteEvent(props.event.id);
+        Swal.fire('Event deleted!');
+      } catch (error) {
+        console.error('An error occurred during the request.', error);
+        Swal.fire('Error!', 'An error occurred during the request.', 'error');
+      }
     }
   };
 
