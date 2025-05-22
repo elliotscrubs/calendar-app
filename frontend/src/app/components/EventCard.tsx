@@ -12,6 +12,7 @@ const EventCard = (props: { event: Event }) => {
   const endTime = dayjs(props.event.endAt).format('HH:mm');
 
   const handleDelete = async () => {
+    console.log('Delete icon clicked');
     const confirmed = window.confirm(
       'Are you sure you want to delete this event?'
     );
