@@ -53,9 +53,8 @@ class CalendarClient {
     return response.data;
   }
 
-  async deleteEvent(id: UUID): Promise<Event> {
-    const response = await this.axiosInstance.delete<Event>(`/events/${id}`);
-    return response.data; 
+  async deleteEvent(id: UUID): Promise<void> {
+    await this.axiosInstance.delete<Event>(`/events/${id}`);    
   } 
 }
 

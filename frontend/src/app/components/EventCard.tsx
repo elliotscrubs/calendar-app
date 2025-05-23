@@ -8,12 +8,15 @@ import CreateIcon from '@mui/icons-material/Create';
 import dayjs from 'dayjs';
 import Swal from 'sweetalert2';
 
-const EventCard = (props: { event: Event }) => {
+const EventCard = (props: {
+  event: Event;
+  deleteEventCard: () => void | Promise<void>;
+}) => {
   const startTime = dayjs(props.event.startAt).format('HH:mm');
   const endTime = dayjs(props.event.endAt).format('HH:mm');
 
   const handleDelete = async () => {
-    const result = await Swal.fire({
+    const confirmationResult = await Swal.fire({
       title: 'Are you sure you want to delete this event?',
       text: 'This event will be deleted!',
       icon: 'warning',
@@ -25,9 +28,10 @@ const EventCard = (props: { event: Event }) => {
       width: '300px',
     });
 
-    if (result.isConfirmed) {
+    if (confirmationResult.isConfirmed) {
       try {
         await calendarClient.deleteEvent(props.event.id);
+        await props.deleteEventCard();
         Swal.fire('Event deleted!');
       } catch (error) {
         console.error('An error occurred during the request.', error);
