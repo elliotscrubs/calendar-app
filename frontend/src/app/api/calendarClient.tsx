@@ -52,6 +52,10 @@ class CalendarClient {
     });
     return response.data;
   }
+
+  async deleteEvent(id: UUID): Promise<void> {
+    await this.axiosInstance.delete<Event>(`/events/${id}`);    
+  } 
 }
 
 export const calendarClient = new CalendarClient('http://localhost:9090');
