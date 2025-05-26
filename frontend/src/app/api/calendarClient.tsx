@@ -38,7 +38,7 @@ class CalendarClient {
   }
 
   async createEvent(data: CreateEventRequest): Promise<Event> {
-    const response = await this.axiosInstance.post<Event>('/events', data);
+    const response = await this.axiosInstance.post<Event>('/events', data);    
     return response.data;
   }  
 

@@ -7,13 +7,22 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import dayjs from 'dayjs';
 import Swal from 'sweetalert2';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(utc);
+dayjs.extend(timezone);
+const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const EventCard = (props: {
   event: Event;
   deleteEventCard: () => void | Promise<void>;
 }) => {
-  const startTime = dayjs(props.event.startAt).format('HH:mm');
-  const endTime = dayjs(props.event.endAt).format('HH:mm');
+  const startTime = dayjs
+    .utc(props.event.startAt)
+    .tz(userTimeZone)
+    .format('HH:mm');
+  const endTime = dayjs.utc(props.event.endAt).tz(userTimeZone).format('HH:mm');
 
   const handleDelete = async () => {
     const confirmationResult = await Swal.fire({
