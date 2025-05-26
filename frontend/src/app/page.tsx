@@ -90,7 +90,11 @@ const EventsTable = () => {
                   borderRight:
                     index === weekdays.length - 1 ? 'none' : '1px solid #ccc',
                 }}>
-                <DayCell index={index} events={events} />
+                <DayCell
+                  index={index}
+                  events={events}
+                  deleteEventCard={loadData}
+                />
               </TableCell>
             ))}
           </TableRow>
