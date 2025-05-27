@@ -4,6 +4,7 @@ import com.ildikoszabo.calendar_app.entity.Event;
 import com.ildikoszabo.calendar_app.service.EventService;
 import jakarta.validation.Valid;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -55,5 +56,21 @@ public class EventController {
 			return ResponseEntity.ok().build();
 		}
 		return ResponseEntity.notFound().build();
+	}
+
+	@PatchMapping("/{id}")
+	public ResponseEntity<?> update(@PathVariable UUID id, @RequestBody Event updates) {
+		Optional<Event> optionalEvent = eventService.findById(id);
+
+		if (optionalEvent.isPresent()) {
+			Event event = optionalEvent.get();
+			event.setStartAt(updates.getStartAt());
+			event.setEndAt(updates.getEndAt());
+			event.setEventText(updates.getEventText());
+			eventService.save(event);
+			return ResponseEntity.ok(event);
+		} else {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Event not found");
+		}
 	}
 }
