@@ -26,6 +26,10 @@ public class EventController {
 
 	@PostMapping
 	public ResponseEntity<?> saveEvent(@Valid @RequestBody Event event, BindingResult result) {
+		if (event.getId() != null) {
+			return ResponseEntity.badRequest().body("Event ID must be empty for creation.");
+		}
+
 		if (result.hasErrors()) {
 			return ResponseEntity.badRequest().body(result.getAllErrors());
 		}
