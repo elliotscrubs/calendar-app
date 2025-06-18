@@ -61,6 +61,36 @@ const CreateDialog = (props: {
     handleClose();
   };
 
+  const handleSubmit = async () => {
+    if (isInvalid(startAt, endAt, eventText)) {
+      return;
+    }
+
+    const selectedDate = dayjs(props.firstDayOfTheWeek).isoWeekday(props.dayIndex + 1);
+
+    const finalStartAt = selectedDate
+      .hour(startAt!.hour())
+      .minute(startAt!.minute());
+
+    const finalEndAt = selectedDate.hour(endAt!.hour()).minute(endAt!.minute());
+
+    const newEvent = {
+      userId: uuidv4(),
+      startAt: finalStartAt.toDate(),
+      endAt: finalEndAt.toDate(),
+      eventText: eventText,
+    };
+
+    try {
+      await calendarClient.createEvent(newEvent);
+      await props.createEventCard();
+      Swal.fire('Event is created!');
+    } catch (error) {
+      console.error('Failed to submit:', error);
+    }
+    handleClose();
+  };
+
   return (
     <>
       <Dialog open={props.open} onClose={() => props.setOpen(false)}>

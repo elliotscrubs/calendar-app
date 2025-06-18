@@ -13,7 +13,7 @@ const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const EventCard = (props: {
   event: Event;
-  deleteEventCard: () => void | Promise<void>;
+  reloadEvents: () => void | Promise<void>;
 }) => {
   const [openUpdate, setOpenUpdate] = React.useState(false);
 
@@ -39,7 +39,7 @@ const EventCard = (props: {
     if (confirmationResult.isConfirmed) {
       try {
         await calendarClient.deleteEvent(props.event.id);
-        await props.deleteEventCard();
+        await props.reloadEvents();
         Swal.fire('Event deleted!');
       } catch (error) {
         console.error('An error occurred during the request.', error);

@@ -17,6 +17,9 @@ const DayCell = (props: {
       .flat();
   }, [props.index, props.events]);
 
+  if (eventsList.length === 0) {
+    return <div style={{ color: 'grey' }}>No events on this day</div>;
+  }
   return eventsList.map((events, index) => (
     <EventCard
       key={index}
