@@ -14,6 +14,7 @@ import {
   Paper,
 } from '@mui/material';
 import DayCell from './components/DayCell';
+import CreateDialog from './components/CreateDialog';
 
 const weekdays = [
   'Monday',
@@ -65,14 +66,14 @@ const EventsTable = () => {
                 align='center'
                 style={{
                   width: '14.28%',
-                  verticalAlign: 'top',
                   ...cellStyle,
                   borderRight:
                     index === weekdays.length - 1
                       ? 'none'
                       : cellStyle.borderRight,
+                  padding: '8px',
                 }}>
-                {day}
+                <CreateDialog day={day} />
               </TableCell>
             ))}
           </TableRow>
@@ -85,7 +86,6 @@ const EventsTable = () => {
                 align='center'
                 style={{
                   width: '14.28%',
-                  verticalAlign: 'top',
                   padding: '8px',
                   borderRight:
                     index === weekdays.length - 1 ? 'none' : '1px solid #ccc',

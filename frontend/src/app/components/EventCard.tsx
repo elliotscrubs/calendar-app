@@ -52,21 +52,21 @@ const EventCard = (props: {
   return (
     <div
       style={{
-        color: 'white',
-        backgroundColor: '#E9967A',
+        color: 'black',
+        backgroundColor: 'rgba(201, 76, 76, 0.3)',
         borderRadius: 4,
         fontSize: '1rem',
-        marginBottom: '8px',
+        marginBottom: '7px',
       }}>
       {startTime} - {endTime}
       <IconButton
         onClick={handleDelete}
         aria-label='delete'
         sx={{ p: 0, m: 1.5 }}>
-        <DeleteIcon sx={{ fontSize: 'small', color: 'white' }} />
+        <DeleteIcon sx={{ fontSize: 'small', color: 'black' }} />
       </IconButton>
       <IconButton aria-label='create' sx={{ p: 0, m: 0 }}>
-        <CreateIcon sx={{ fontSize: 'small', color: 'white' }} />
+        <CreateIcon sx={{ fontSize: 'small', color: 'black' }} />
       </IconButton>
       <br></br>
       {props.event.eventText}
