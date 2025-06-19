@@ -73,7 +73,7 @@ const EventsTable = () => {
                       : cellStyle.borderRight,
                   padding: '8px',
                 }}>
-                <CreateDialog day={day} />
+                <CreateDialog day={day} createEventCard={loadData} />
               </TableCell>
             ))}
           </TableRow>
