@@ -15,6 +15,7 @@ import {
 } from '@mui/material';
 import DayCell from './components/DayCell';
 import CreateDialog from './components/CreateDialog';
+dayjs.extend(isoWeek);
 
 const weekdays = [
   'Monday',
@@ -41,7 +42,6 @@ const EventsTable = () => {
   }, []);
 
   async function loadData() {
-    dayjs.extend(isoWeek);
     const monday: Date = dayjs().isoWeekday(1).toDate();
     const sunday: Date = dayjs().isoWeekday(7).toDate();
 
@@ -73,7 +73,8 @@ const EventsTable = () => {
                       : cellStyle.borderRight,
                   padding: '8px',
                 }}>
-                <CreateDialog day={day} createEventCard={loadData} />
+                {day}
+                <CreateDialog dayIndex={index} createEventCard={loadData} />
               </TableCell>
             ))}
           </TableRow>

@@ -16,9 +16,12 @@ import { Dayjs } from 'dayjs';
 import { calendarClient } from '../api/calendarClient';
 import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
+dayjs.extend(isoWeek);
 
 const CreateDialog = (props: {
-  day: string;
+  dayIndex: number;
   createEventCard: () => void | Promise<void>;
 }) => {
   const [open, setOpen] = React.useState(false);
@@ -47,17 +50,25 @@ const CreateDialog = (props: {
       return;
     }
 
+    const selectedDate = dayjs().isoWeekday(props.dayIndex + 1);
+
+    const finalStartAt = selectedDate
+      .hour(startAt!.hour())
+      .minute(startAt!.minute());
+
+    const finalEndAt = selectedDate.hour(endAt!.hour()).minute(endAt!.minute());
+
     const newEvent = {
       userId: uuidv4(),
-      startAt: startAt!.toDate(),
-      endAt: endAt!.toDate(),
+      startAt: finalStartAt.toDate(),
+      endAt: finalEndAt.toDate(),
       eventText: eventText,
     };
 
     try {
       await calendarClient.createEvent(newEvent);
       await props.createEventCard();
-      Swal.fire('Event is created!');      
+      Swal.fire('Event is created!');
     } catch (error) {
       console.error('Failed to submit:', error);
     }
@@ -66,24 +77,14 @@ const CreateDialog = (props: {
 
   return (
     <>
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          ml: 5,
-        }}>
-        {props.day}
-        <Fab
-          size='small'
-          color='primary'
-          aria-label='add'
-          align-items='center'
-          sx={{ width: 36, height: 30 }}
-          onClick={handleClickOpen}>
-          <AddIcon sx={{ fontSize: 25 }} />
-        </Fab>
-      </Box>
+      <Fab
+        size='small'
+        color='primary'
+        aria-label='add'
+        sx={{ width: 36, height: 30, ml: 5 }}
+        onClick={handleClickOpen}>
+        <AddIcon sx={{ fontSize: 25 }} />
+      </Fab>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>{'Create a new event'}</DialogTitle>
         <DialogContent>
