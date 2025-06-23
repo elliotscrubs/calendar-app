@@ -20,9 +20,9 @@ export type ByDateResponse = Record<string, Event[]>;
 // Date format = "yyyy-MM-dd";
 
 function formatDate(date: Date): string {
-  const offset = date.getTimezoneOffset()
-  const offsetApplied = new Date(date.getTime() - (offset*60*1000))
-  return offsetApplied.toISOString().split('T')[0]
+  const offset = date.getTimezoneOffset();
+  const offsetApplied = new Date(date.getTime() - offset * 60 * 1000);
+  return offsetApplied.toISOString().split('T')[0];
 }
 
 class CalendarClient {
@@ -37,25 +37,37 @@ class CalendarClient {
     });
   }
 
-  async createEvent(data: CreateEventRequest): Promise<Event> {
-    const response = await this.axiosInstance.post<Event>('/events', data);    
-    return response.data;
-  }  
-
   async getEvents(userId: UUID, fromDate: Date, toDate: Date) {
-    const response = await this.axiosInstance.get<ByDateResponse>('/events/byDate', {
-      params: {        
-        userId: userId,
-        fromDate: formatDate(fromDate),
-        toDate: formatDate(toDate)
-      },
-    });
+    const response = await this.axiosInstance.get<ByDateResponse>(
+      '/events/byDate',
+      {
+        params: {
+          userId: userId,
+          fromDate: formatDate(fromDate),
+          toDate: formatDate(toDate),
+        },
+      }
+    );
+    return response.data;
+  }
+
+  async createEvent(data: CreateEventRequest): Promise<Event> {
+    const response = await this.axiosInstance.post<Event>('/events', data);
     return response.data;
   }
 
   async deleteEvent(id: UUID): Promise<void> {
-    await this.axiosInstance.delete<Event>(`/events/${id}`);    
-  } 
+    await this.axiosInstance.delete<Event>(`/events/${id}`);
+  }
+
+  async updateEvent(id: UUID, data: CreateEventRequest): Promise<Event> {
+    const response = await this.axiosInstance.patch<Event>(
+      `/events/${id}`,
+      data
+    );
+    return response.data;
+    console.log(response);
+  }
 }
 
 export const calendarClient = new CalendarClient('http://localhost:9090');

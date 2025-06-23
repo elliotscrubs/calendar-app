@@ -1,0 +1,155 @@
+'use client';
+
+import * as React from 'react';
+import { calendarClient, Event } from '../api/calendarClient';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { Box, Button, TextField } from '@mui/material';
+import dayjs from 'dayjs';
+import isoWeek from 'dayjs/plugin/isoWeek';
+import CreateIcon from '@mui/icons-material/Create';
+import { Dayjs } from 'dayjs';
+import Swal from 'sweetalert2';
+import IconButton from '@mui/material/IconButton';
+import utc from 'dayjs/plugin/utc';
+import timezone from 'dayjs/plugin/timezone';
+
+dayjs.extend(isoWeek);
+dayjs.extend(utc);
+dayjs.extend(timezone);
+
+const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+const UpdateDialog = (props: {
+  event: Event;
+  updateEventCard: () => void | Promise<void>;
+}) => {
+  const [open, setOpen] = React.useState(false);
+  const [startAt, setStartAt] = React.useState<Dayjs | null>(
+    dayjs(props.event.startAt)
+  );
+  const [endAt, setEndAt] = React.useState<Dayjs | null>(
+    dayjs(props.event.endAt)
+  );
+  const [eventText, setEventText] = React.useState(props.event.eventText);
+
+  function isInvalid(
+    startAt: Dayjs | null,
+    endAt: Dayjs | null,
+    eventText: string
+  ): boolean {
+    return !startAt || !endAt || eventText.length < 5 || eventText.length > 200;
+  }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleSubmit = async () => {
+    if (isInvalid(startAt, endAt, eventText)) {
+      return;
+    }
+
+    const newEvent = {
+      userId: props.event.userId,
+      startAt: startAt!.toDate(),
+      endAt: endAt!.toDate(),
+      eventText: eventText,
+    };
+
+    try {
+      await calendarClient.updateEvent(props.event.id, newEvent);
+      await props.updateEventCard();
+      Swal.fire('Event is updated!');
+    } catch (error) {
+      console.error('Failed to submit:', error);
+    }
+    handleClose();
+  };
+
+  return (
+    <>
+      <IconButton aria-label='update' sx={{ p: 0 }} onClick={handleClickOpen}>
+        <CreateIcon sx={{ fontSize: 'small', color: 'black' }} />
+      </IconButton>
+      <Dialog open={open} onClose={handleClose}>
+        <DialogTitle>{'Update an event'}</DialogTitle>
+        <DialogContent>
+          <Box
+            sx={{
+              pb: 2,
+              border: 2,
+              width: '32ch',
+              borderRadius: '5px',
+              borderColor: 'blue',
+            }}>
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+              <DemoContainer
+                components={['TimePicker']}
+                sx={{ m: 1, width: '30ch' }}>
+                <TimePicker
+                  label='Event Start'
+                  value={dayjs.utc(props.event.startAt).tz(userTimeZone)}
+                  onChange={newValue => {
+                    setStartAt(newValue);
+                  }}
+                />
+              </DemoContainer>
+
+              <DemoContainer
+                components={['TimePicker']}
+                sx={{ m: 1, width: '30ch' }}>
+                <TimePicker
+                  label='Event End'
+                  value={dayjs.utc(props.event.endAt).tz(userTimeZone)}
+                  onChange={newValue => {
+                    setEndAt(newValue);
+                  }}
+                />
+              </DemoContainer>
+            </LocalizationProvider>
+
+            <TextField
+              required
+              error={eventText.length < 5 || eventText.length > 200}
+              helperText={eventText.length ? 'min 5, max 200' : ''}
+              slotProps={{ htmlInput: { maxLength: 200 } }}
+              label='Event Text'
+              variant='outlined'
+              value={eventText}
+              onChange={e => setEventText(e.target.value)}
+              sx={{ m: 1, width: '30ch' }}
+            />
+          </Box>
+        </DialogContent>
+        <DialogActions sx={{ justifyContent: 'center' }}>
+          <Button
+            onClick={handleSubmit}
+            sx={{
+              my: 2,
+              border: 2,
+              width: '30ch',
+              borderRadius: '5px',
+              borderColor: 'blue',
+              backgroundColor: 'blue',
+              color: 'white',
+            }}>
+            Update event
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
+  );
+};
+
+export default UpdateDialog;

@@ -4,11 +4,11 @@ import * as React from 'react';
 import { calendarClient, Event } from '../api/calendarClient';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CreateIcon from '@mui/icons-material/Create';
 import dayjs from 'dayjs';
 import Swal from 'sweetalert2';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import UpdateDialog from './UpdateDialog';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -16,7 +16,7 @@ const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const EventCard = (props: {
   event: Event;
-  deleteEventCard: () => void | Promise<void>;
+  reloadEvents: () => void | Promise<void>;
 }) => {
   const startTime = dayjs
     .utc(props.event.startAt)
@@ -40,7 +40,7 @@ const EventCard = (props: {
     if (confirmationResult.isConfirmed) {
       try {
         await calendarClient.deleteEvent(props.event.id);
-        await props.deleteEventCard();
+        await props.reloadEvents();
         Swal.fire('Event deleted!');
       } catch (error) {
         console.error('An error occurred during the request.', error);
@@ -65,9 +65,7 @@ const EventCard = (props: {
         sx={{ p: 0, m: 1.5 }}>
         <DeleteIcon sx={{ fontSize: 'small', color: 'black' }} />
       </IconButton>
-      <IconButton aria-label='create' sx={{ p: 0, m: 0 }}>
-        <CreateIcon sx={{ fontSize: 'small', color: 'black' }} />
-      </IconButton>
+      <UpdateDialog event={props.event} updateEventCard={props.reloadEvents} />
       <br></br>
       {props.event.eventText}
     </div>
