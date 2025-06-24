@@ -20,9 +20,11 @@ import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
 dayjs.extend(isoWeek);
 
+
 const CreateDialog = (props: {
   dayIndex: number;
   createEventCard: () => void | Promise<void>;
+  firstDayOfTheWeek: Date;
 }) => {
   const [open, setOpen] = React.useState(false);
   const [startAt, setStartAt] = React.useState<Dayjs | null>(null);
@@ -50,7 +52,7 @@ const CreateDialog = (props: {
       return;
     }
 
-    const selectedDate = dayjs().isoWeekday(props.dayIndex + 1);
+    const selectedDate = dayjs(props.firstDayOfTheWeek).isoWeekday(props.dayIndex + 1);
 
     const finalStartAt = selectedDate
       .hour(startAt!.hour())

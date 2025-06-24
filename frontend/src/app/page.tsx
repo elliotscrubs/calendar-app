@@ -1,108 +1,51 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
-import { ByDateResponse, calendarClient } from './api/calendarClient';
-import dayjs from 'dayjs';
+import { useState } from 'react';
+import { Dayjs } from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-} from '@mui/material';
-import DayCell from './components/DayCell';
-import CreateDialog from './components/CreateDialog';
+import dayjs from 'dayjs';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+import IconButton from '@mui/material/IconButton';
+
 dayjs.extend(isoWeek);
+const now = dayjs();
+const monday = now.startOf('isoWeek');
+const sunday = now.startOf('isoWeek').add(6, 'day');
+const formattedWeek = `${monday.format('MM.DD')} - ${sunday.format('MM.DD')}`;
 
-const weekdays = [
-  'Monday',
-  'Tuesday',
-  'Wednesday',
-  'Thursday',
-  'Friday',
-  'Saturday',
-  'Sunday',
-];
+const CurrentEventTable = () => {
+  const [firstDayOfTheWeek, setFirstDayOfTheWeek] = useState<Dayjs>(monday);
 
-const cellStyle = {
-  fontWeight: 'bold',
-  color: 'white',
-  backgroundColor: '#1976d2',
-  borderRight: '1px solid white',
-};
+  function steppingWeeksBack() {
+    const currentDate = new Date();
+    const lastWeekDate = new Date(currentDate.getTime());
+    console.log(lastWeekDate);
+    return lastWeekDate;
+  }
 
-const EventsTable = () => {
-  const [events, setEvents] = useState<ByDateResponse>({});
-
-  useEffect(() => {
-    loadData();
-  }, []);
-
-  async function loadData() {
-    const monday: Date = dayjs().isoWeekday(1).toDate();
-    const sunday: Date = dayjs().isoWeekday(7).toDate();
-
-    const eventTest = calendarClient.getEvents(
-      '00000300-0000-0000-0000-000000000000',
-      monday,
-      sunday
-    );
-    setEvents(await eventTest);
+  function steppingWeeksForward() {
+    const currentDate = new Date();
+    const nextWeekDate = new Date(currentDate.getTime() + 7);
+    console.log(nextWeekDate);
+    return nextWeekDate;
   }
 
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ maxWidth: 1600, margin: 'auto', borderRadius: 3, mt: 4 }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {weekdays.map((day, index) => (
-              <TableCell
-                key={index}
-                align='center'
-                style={{
-                  width: '14.28%',
-                  ...cellStyle,
-                  borderRight:
-                    index === weekdays.length - 1
-                      ? 'none'
-                      : cellStyle.borderRight,
-                  padding: '8px',
-                }}>
-                {day}
-                <CreateDialog dayIndex={index} createEventCard={loadData} />
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            {weekdays.map((dayName, index) => (
-              <TableCell
-                key={index}
-                align='center'
-                style={{
-                  width: '14.28%',
-                  padding: '8px',
-                  borderRight:
-                    index === weekdays.length - 1 ? 'none' : '1px solid #ccc',
-                }}>
-                <DayCell
-                  index={index}
-                  events={events}
-                  deleteEventCard={loadData}
-                />
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <div>
+        <h2>
+          {formattedWeek}
+        </h2>
+        <IconButton onClick={steppingWeeksBack}>
+          <ArrowBackIcon sx={{ fontSize: 'small', color: 'blue' }} />   
+        </IconButton> 
+        <IconButton onClick={steppingWeeksForward}> 
+          <ArrowForwardIcon sx={{ fontSize: 'small', color: 'black' }} />
+        </IconButton>    
+      </div>
+    </>
   );
 };
 
-export default EventsTable;
+export default CurrentEventTable;

@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+
 type UUID = string;
 
 export interface CreateEventRequest {
