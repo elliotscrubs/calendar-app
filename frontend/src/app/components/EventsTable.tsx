@@ -34,18 +34,16 @@ const cellStyle = {
   borderRight: '1px solid white',
 };
 
-const EventsTable = (props: {
-  firstDayOfTheWeek: Date;
-}) => {
+const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
   const [events, setEvents] = useState<ByDateResponse>({});
 
   useEffect(() => {
     loadData();
-  }, []);
+  }, [props.firstDayOfTheWeek]);
 
   async function loadData() {
-    const lastDayOfTheWeek = props.firstDayOfTheWeek
-    lastDayOfTheWeek.setDate(props.firstDayOfTheWeek.getDate() + 7);
+    const lastDayOfTheWeek = new Date(props.firstDayOfTheWeek);
+    lastDayOfTheWeek.setDate(lastDayOfTheWeek.getDate() + 7);
 
     const eventTest = calendarClient.getEvents(
       '00000300-0000-0000-0000-000000000000',
@@ -55,8 +53,8 @@ const EventsTable = (props: {
     setEvents(await eventTest);
   }
 
-   // const weekdays: Date[] = [
-     
+  // const weekdays: Date[] = [
+
   //   ];
 
   return (
@@ -79,9 +77,12 @@ const EventsTable = (props: {
                       : cellStyle.borderRight,
                   padding: '8px',
                 }}>
-
                 {day}
-                <CreateDialog dayIndex={index} createEventCard={loadData} firstDayOfTheWeek={props.firstDayOfTheWeek}/>
+                <CreateDialog
+                  dayIndex={index}
+                  createEventCard={loadData}
+                  firstDayOfTheWeek={props.firstDayOfTheWeek}
+                />
               </TableCell>
             ))}
           </TableRow>

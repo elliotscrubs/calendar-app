@@ -7,43 +7,46 @@ import dayjs from 'dayjs';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import IconButton from '@mui/material/IconButton';
+import EventsTable from './components/EventsTable';
 
 dayjs.extend(isoWeek);
-const now = dayjs();
-const monday = now.startOf('isoWeek');
-const sunday = now.startOf('isoWeek').add(6, 'day');
-const formattedWeek = `${monday.format('MM.DD')} - ${sunday.format('MM.DD')}`;
 
 const CurrentEventTable = () => {
-  const [firstDayOfTheWeek, setFirstDayOfTheWeek] = useState<Dayjs>(monday);
+  const [firstDayOfTheWeek, setFirstDayOfTheWeek] = useState<Dayjs>(
+    dayjs().startOf('isoWeek')
+  );
+
+  const monday = firstDayOfTheWeek;
+  const sunday = firstDayOfTheWeek.add(6, 'day');
+  const formattedWeek = `${monday.format('MM.DD')} - ${sunday.format('MM.DD')}`;
 
   function steppingWeeksBack() {
-    const currentDate = new Date();
-    const lastWeekDate = new Date(currentDate.getTime());
-    console.log(lastWeekDate);
-    return lastWeekDate;
+    setFirstDayOfTheWeek(firstDayOfTheWeek =>
+      firstDayOfTheWeek.subtract(1, 'week')
+    );
   }
 
   function steppingWeeksForward() {
-    const currentDate = new Date();
-    const nextWeekDate = new Date(currentDate.getTime() + 7);
-    console.log(nextWeekDate);
-    return nextWeekDate;
+    setFirstDayOfTheWeek(firstDayOfTheWeek => firstDayOfTheWeek.add(1, 'week'));
   }
 
   return (
     <>
-      <div>
-        <h2>
-          {formattedWeek}
-        </h2>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          color: 'grey', 
+        }}>
         <IconButton onClick={steppingWeeksBack}>
-          <ArrowBackIcon sx={{ fontSize: 'small', color: 'blue' }} />   
-        </IconButton> 
-        <IconButton onClick={steppingWeeksForward}> 
-          <ArrowForwardIcon sx={{ fontSize: 'small', color: 'black' }} />
-        </IconButton>    
+          <ArrowBackIcon />
+        </IconButton>
+        <h2>{formattedWeek}</h2>
+        <IconButton onClick={steppingWeeksForward}>
+          <ArrowForwardIcon />
+        </IconButton>
       </div>
+      <EventsTable firstDayOfTheWeek={firstDayOfTheWeek.toDate()} />
     </>
   );
 };
