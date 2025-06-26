@@ -13,10 +13,8 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Box, Button, TextField } from '@mui/material';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
-import CreateIcon from '@mui/icons-material/Create';
 import { Dayjs } from 'dayjs';
 import Swal from 'sweetalert2';
-import IconButton from '@mui/material/IconButton';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 
@@ -29,13 +27,14 @@ const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 const UpdateDialog = (props: {
   event: Event;
   updateEventCard: () => void | Promise<void>;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [open, setOpen] = React.useState(false);
   const [startAt, setStartAt] = React.useState<Dayjs | null>(
-    dayjs(props.event.startAt)
+    dayjs.utc(props.event.startAt).tz(userTimeZone)
   );
   const [endAt, setEndAt] = React.useState<Dayjs | null>(
-    dayjs(props.event.endAt)
+    dayjs.utc(props.event.endAt).tz(userTimeZone)
   );
   const [eventText, setEventText] = React.useState(props.event.eventText);
 
@@ -47,12 +46,8 @@ const UpdateDialog = (props: {
     return !startAt || !endAt || eventText.length < 5 || eventText.length > 200;
   }
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
-    setOpen(false);
+    props.setOpen(false);
   };
 
   const handleSubmit = async () => {
@@ -79,10 +74,7 @@ const UpdateDialog = (props: {
 
   return (
     <>
-      <IconButton aria-label='update' sx={{ p: 0 }} onClick={handleClickOpen}>
-        <CreateIcon sx={{ fontSize: 'small', color: 'black' }} />
-      </IconButton>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={props.open} onClose={() => props.setOpen(false)}>
         <DialogTitle>{'Update an event'}</DialogTitle>
         <DialogContent>
           <Box
@@ -99,7 +91,7 @@ const UpdateDialog = (props: {
                 sx={{ m: 1, width: '30ch' }}>
                 <TimePicker
                   label='Event Start'
-                  value={dayjs.utc(props.event.startAt).tz(userTimeZone)}
+                  value={startAt}
                   onChange={newValue => {
                     setStartAt(newValue);
                   }}
@@ -111,7 +103,7 @@ const UpdateDialog = (props: {
                 sx={{ m: 1, width: '30ch' }}>
                 <TimePicker
                   label='Event End'
-                  value={dayjs.utc(props.event.endAt).tz(userTimeZone)}
+                  value={endAt}
                   onChange={newValue => {
                     setEndAt(newValue);
                   }}

@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
 import UpdateDialog from './UpdateDialog';
+import CreateIcon from '@mui/icons-material/Create';
 
 dayjs.extend(utc);
 dayjs.extend(timezone);
@@ -18,6 +19,8 @@ const EventCard = (props: {
   event: Event;
   reloadEvents: () => void | Promise<void>;
 }) => {
+  const [openUpdate, setOpenUpdate] = React.useState(false);
+
   const startTime = dayjs
     .utc(props.event.startAt)
     .tz(userTimeZone)
@@ -65,7 +68,19 @@ const EventCard = (props: {
         sx={{ p: 0, m: 1.5 }}>
         <DeleteIcon sx={{ fontSize: 'small', color: 'black' }} />
       </IconButton>
-      <UpdateDialog event={props.event} updateEventCard={props.reloadEvents} />
+      <IconButton
+        onClick={() => setOpenUpdate(true)}
+        aria-label='edit'
+        size='small'
+        sx={{ p: 0.5 }}>
+        <CreateIcon sx={{ fontSize: 'small', color: 'black' }} />
+      </IconButton>
+      <UpdateDialog
+        event={props.event}
+        updateEventCard={props.reloadEvents}
+        open={openUpdate}
+        setOpen={setOpenUpdate}
+      />
       <br></br>
       {props.event.eventText}
     </div>

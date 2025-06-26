@@ -5,8 +5,6 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import AddIcon from '@mui/icons-material/Add';
-import Fab from '@mui/material/Fab';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -23,8 +21,9 @@ dayjs.extend(isoWeek);
 const CreateDialog = (props: {
   dayIndex: number;
   createEventCard: () => void | Promise<void>;
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [open, setOpen] = React.useState(false);
   const [startAt, setStartAt] = React.useState<Dayjs | null>(null);
   const [endAt, setEndAt] = React.useState<Dayjs | null>(null);
   const [eventText, setEventText] = React.useState('');
@@ -37,12 +36,8 @@ const CreateDialog = (props: {
     return !startAt || !endAt || eventText.length < 5 || eventText.length > 200;
   }
 
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
   const handleClose = () => {
-    setOpen(false);
+    props.setOpen(false);
   };
 
   const handleSubmit = async () => {
@@ -77,15 +72,7 @@ const CreateDialog = (props: {
 
   return (
     <>
-      <Fab
-        size='small'
-        color='primary'
-        aria-label='add'
-        sx={{ width: 36, height: 30, ml: 5 }}
-        onClick={handleClickOpen}>
-        <AddIcon sx={{ fontSize: 25 }} />
-      </Fab>
-      <Dialog open={open} onClose={handleClose}>
+      <Dialog open={props.open} onClose={() => props.setOpen(false)}>
         <DialogTitle>{'Create a new event'}</DialogTitle>
         <DialogContent>
           <Box
@@ -108,7 +95,6 @@ const CreateDialog = (props: {
                   }}
                 />
               </DemoContainer>
-
               <DemoContainer
                 components={['TimePicker']}
                 sx={{ m: 1, width: '30ch' }}>
@@ -121,7 +107,6 @@ const CreateDialog = (props: {
                 />
               </DemoContainer>
             </LocalizationProvider>
-
             <TextField
               required
               error={eventText.length < 5 || eventText.length > 200}
