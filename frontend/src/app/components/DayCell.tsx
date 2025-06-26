@@ -21,7 +21,7 @@ const DayCell = (props: {
     <EventCard
       key={index}
       event={events}
-      reloadEvents={props.deleteEventCard}
+      deleteEventCard={props.deleteEventCard}
     />
   ));
 };

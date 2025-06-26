@@ -120,7 +120,7 @@ const EventsTable = () => {
       {selectedDayIndex !== null && (
         <CreateDialog
           dayIndex={selectedDayIndex}
-          createEventCard={loadData}
+          onCreateEventCard={loadData}
           open={open}
           setOpen={setOpen}
         />

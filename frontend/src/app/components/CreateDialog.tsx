@@ -16,25 +16,19 @@ import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
 import dayjs from 'dayjs';
 import isoWeek from 'dayjs/plugin/isoWeek';
+import { isInvalid } from '../utils';
 dayjs.extend(isoWeek);
+
 
 const CreateDialog = (props: {
   dayIndex: number;
-  createEventCard: () => void | Promise<void>;
+  onCreateEventCard: () => void | Promise<void>;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [startAt, setStartAt] = React.useState<Dayjs | null>(null);
   const [endAt, setEndAt] = React.useState<Dayjs | null>(null);
-  const [eventText, setEventText] = React.useState('');
-
-  function isInvalid(
-    startAt: Dayjs | null,
-    endAt: Dayjs | null,
-    eventText: string
-  ): boolean {
-    return !startAt || !endAt || eventText.length < 5 || eventText.length > 200;
-  }
+  const [eventText, setEventText] = React.useState('');  
 
   const handleClose = () => {
     props.setOpen(false);
@@ -62,7 +56,7 @@ const CreateDialog = (props: {
 
     try {
       await calendarClient.createEvent(newEvent);
-      await props.createEventCard();
+      await props.onCreateEventCard();
       Swal.fire('Event is created!');
     } catch (error) {
       console.error('Failed to submit:', error);

@@ -17,6 +17,7 @@ import { Dayjs } from 'dayjs';
 import Swal from 'sweetalert2';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import { isInvalid } from '../utils';
 
 dayjs.extend(isoWeek);
 dayjs.extend(utc);
@@ -26,7 +27,7 @@ const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const UpdateDialog = (props: {
   event: Event;
-  updateEventCard: () => void | Promise<void>;
+  onUpdateEventCard: () => void | Promise<void>;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -37,14 +38,6 @@ const UpdateDialog = (props: {
     dayjs.utc(props.event.endAt).tz(userTimeZone)
   );
   const [eventText, setEventText] = React.useState(props.event.eventText);
-
-  function isInvalid(
-    startAt: Dayjs | null,
-    endAt: Dayjs | null,
-    eventText: string
-  ): boolean {
-    return !startAt || !endAt || eventText.length < 5 || eventText.length > 200;
-  }
 
   const handleClose = () => {
     props.setOpen(false);
@@ -64,7 +57,7 @@ const UpdateDialog = (props: {
 
     try {
       await calendarClient.updateEvent(props.event.id, newEvent);
-      await props.updateEventCard();
+      await props.onUpdateEventCard();
       Swal.fire('Event is updated!');
     } catch (error) {
       console.error('Failed to submit:', error);

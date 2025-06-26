@@ -66,7 +66,6 @@ class CalendarClient {
       data
     );
     return response.data;
-    console.log(response);
   }
 }
 
