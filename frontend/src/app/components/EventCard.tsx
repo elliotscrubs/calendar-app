@@ -4,15 +4,11 @@ import * as React from 'react';
 import { calendarClient, Event } from '../api/calendarClient';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import dayjs from 'dayjs';
 import Swal from 'sweetalert2';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
 import UpdateDialog from './UpdateDialog';
 import CreateIcon from '@mui/icons-material/Create';
+import dayjs from '../utils/dayjs'; 
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const EventCard = (props: {

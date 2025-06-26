@@ -14,11 +14,8 @@ import { Dayjs } from 'dayjs';
 import { calendarClient } from '../api/calendarClient';
 import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
-import { isInvalid } from '../utils';
-dayjs.extend(isoWeek);
-
+import { isInvalid } from '../utils/isInValid';
+import dayjs from '../utils/dayjs'; 
 
 const CreateDialog = (props: {
   dayIndex: number;

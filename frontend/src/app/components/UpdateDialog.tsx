@@ -11,17 +11,10 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Box, Button, TextField } from '@mui/material';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import { Dayjs } from 'dayjs';
 import Swal from 'sweetalert2';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
-import { isInvalid } from '../utils';
-
-dayjs.extend(isoWeek);
-dayjs.extend(utc);
-dayjs.extend(timezone);
+import { isInvalid } from '../utils/isInValid';
+import dayjs from '../utils/dayjs'; 
 
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 

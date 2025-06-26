@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { ByDateResponse, calendarClient } from './api/calendarClient';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import {
   Table,
   TableBody,
@@ -17,7 +15,7 @@ import {
 import DayCell from './components/DayCell';
 import CreateDialog from './components/CreateDialog';
 import AddIcon from '@mui/icons-material/Add';
-dayjs.extend(isoWeek);
+import dayjs from './utils/dayjs'; 
 
 const weekdays = [
   'Monday',
