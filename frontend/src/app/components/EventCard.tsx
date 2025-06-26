@@ -4,20 +4,19 @@ import * as React from 'react';
 import { calendarClient, Event } from '../api/calendarClient';
 import IconButton from '@mui/material/IconButton';
 import DeleteIcon from '@mui/icons-material/Delete';
-import CreateIcon from '@mui/icons-material/Create';
-import dayjs from 'dayjs';
 import Swal from 'sweetalert2';
-import utc from 'dayjs/plugin/utc';
-import timezone from 'dayjs/plugin/timezone';
+import UpdateDialog from './UpdateDialog';
+import CreateIcon from '@mui/icons-material/Create';
+import dayjs from '../utils/dayjs'; 
 
-dayjs.extend(utc);
-dayjs.extend(timezone);
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const EventCard = (props: {
   event: Event;
   deleteEventCard: () => void | Promise<void>;
 }) => {
+  const [openUpdate, setOpenUpdate] = React.useState(false);
+
   const startTime = dayjs
     .utc(props.event.startAt)
     .tz(userTimeZone)
@@ -52,22 +51,32 @@ const EventCard = (props: {
   return (
     <div
       style={{
-        color: 'white',
-        backgroundColor: '#E9967A',
+        color: 'black',
+        backgroundColor: 'rgba(201, 76, 76, 0.3)',
         borderRadius: 4,
         fontSize: '1rem',
-        marginBottom: '8px',
+        marginBottom: '7px',
       }}>
       {startTime} - {endTime}
       <IconButton
         onClick={handleDelete}
         aria-label='delete'
         sx={{ p: 0, m: 1.5 }}>
-        <DeleteIcon sx={{ fontSize: 'small', color: 'white' }} />
+        <DeleteIcon sx={{ fontSize: 'small', color: 'black' }} />
       </IconButton>
-      <IconButton aria-label='create' sx={{ p: 0, m: 0 }}>
-        <CreateIcon sx={{ fontSize: 'small', color: 'white' }} />
+      <IconButton
+        onClick={() => setOpenUpdate(true)}
+        aria-label='edit'
+        size='small'
+        sx={{ p: 0.5 }}>
+        <CreateIcon sx={{ fontSize: 'small', color: 'black' }} />
       </IconButton>
+      <UpdateDialog
+        event={props.event}
+        onUpdateEventCard={props.deleteEventCard}
+        open={openUpdate}
+        setOpen={setOpenUpdate}
+      />
       <br></br>
       {props.event.eventText}
     </div>
