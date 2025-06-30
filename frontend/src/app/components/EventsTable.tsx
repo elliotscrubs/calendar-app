@@ -2,8 +2,6 @@
 
 import React, { useEffect, useState } from 'react';
 import { ByDateResponse, calendarClient } from '../api/calendarClient';
-import dayjs from 'dayjs';
-import isoWeek from 'dayjs/plugin/isoWeek';
 import {
   Table,
   TableBody,
@@ -12,10 +10,11 @@ import {
   TableHead,
   TableRow,
   Paper,
+  Fab,
 } from '@mui/material';
 import DayCell from '../components/DayCell';
 import CreateDialog from '../components/CreateDialog';
-dayjs.extend(isoWeek);
+import AddIcon from '@mui/icons-material/Add';
 
 const weekdays = [
   'Monday',
@@ -36,6 +35,8 @@ const cellStyle = {
 
 const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
   const [events, setEvents] = useState<ByDateResponse>({});
+  const [openCreate, setOpenCreate] = React.useState(false);
+  const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
 
   useEffect(() => {
     loadData();
@@ -53,63 +54,77 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
     setEvents(await eventTest);
   }
 
-  // const weekdays: Date[] = [
-
-  //   ];
-
   return (
-    <TableContainer
-      component={Paper}
-      sx={{ maxWidth: 1600, margin: 'auto', borderRadius: 3, mt: 4 }}>
-      <Table>
-        <TableHead>
-          <TableRow>
-            {weekdays.map((day, index) => (
-              <TableCell
-                key={index}
-                align='center'
-                style={{
-                  width: '14.28%',
-                  ...cellStyle,
-                  borderRight:
-                    index === weekdays.length - 1
-                      ? 'none'
-                      : cellStyle.borderRight,
-                  padding: '8px',
-                }}>
-                {day}
-                <CreateDialog
-                  dayIndex={index}
-                  createEventCard={loadData}
-                  firstDayOfTheWeek={props.firstDayOfTheWeek}
-                />
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          <TableRow>
-            {weekdays.map((dayName, index) => (
-              <TableCell
-                key={index}
-                align='center'
-                style={{
-                  width: '14.28%',
-                  padding: '8px',
-                  borderRight:
-                    index === weekdays.length - 1 ? 'none' : '1px solid #ccc',
-                }}>
-                <DayCell
-                  index={index}
-                  events={events}
-                  deleteEventCard={loadData}
-                />
-              </TableCell>
-            ))}
-          </TableRow>
-        </TableBody>
-      </Table>
-    </TableContainer>
+    <>
+      <TableContainer
+        component={Paper}
+        sx={{ maxWidth: 1600, margin: 'auto', borderRadius: 3, mt: 4 }}>
+        <Table>
+          <TableHead>
+            <TableRow>
+              {weekdays.map((day, index) => (
+                <TableCell
+                  key={index}
+                  align='center'
+                  style={{
+                    width: '14.28%',
+                    ...cellStyle,
+                    borderRight:
+                      index === weekdays.length - 1
+                        ? 'none'
+                        : cellStyle.borderRight,
+                    padding: '8px',
+                  }}>
+                  {day}
+                  <Fab
+                    size='small'
+                    color='primary'
+                    aria-label='add'
+                    sx={{ width: 36, height: 30, ml: 5 }}
+                    onClick={() => {
+                      setSelectedDayIndex(index);
+                      setOpenCreate(true);
+                    }}>
+                    <AddIcon sx={{ fontSize: 25 }} />
+                  </Fab>
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            <TableRow>
+              {weekdays.map((dayName, index) => (
+                <TableCell
+                  key={index}
+                  align='center'
+                  style={{
+                    width: '14.28%',
+                    padding: '8px',
+                    borderRight:
+                      index === weekdays.length - 1 ? 'none' : '1px solid #ccc',
+                  }}>
+                  <DayCell
+                    index={index}
+                    events={events}
+                    onDeleteEventCard={loadData}
+                    onUpdateEventCard={loadData}
+                  />
+                </TableCell>
+              ))}
+            </TableRow>
+          </TableBody>
+        </Table>
+      </TableContainer>
+      {selectedDayIndex !== null && (
+        <CreateDialog
+          dayIndex={selectedDayIndex}
+          onCreateEventCard={loadData}
+          open={openCreate}
+          setOpen={setOpenCreate}
+          firstDayOfTheWeek={props.firstDayOfTheWeek}
+        />
+      )}
+    </>
   );
 };
 

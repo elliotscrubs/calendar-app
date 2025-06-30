@@ -14,18 +14,19 @@ import { Dayjs } from 'dayjs';
 import { calendarClient } from '../api/calendarClient';
 import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
-import { isInvalid } from '../utils/isInValid';
-import dayjs from '../utils/dayjs'; 
+import { isInvalid } from '../utils/isInvalid';
+import dayjs from '../utils/dayjs';
 
 const CreateDialog = (props: {
   dayIndex: number;
+  firstDayOfTheWeek: Date;
   onCreateEventCard: () => void | Promise<void>;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [startAt, setStartAt] = React.useState<Dayjs | null>(null);
   const [endAt, setEndAt] = React.useState<Dayjs | null>(null);
-  const [eventText, setEventText] = React.useState('');  
+  const [eventText, setEventText] = React.useState('');
 
   const handleClose = () => {
     props.setOpen(false);
@@ -36,7 +37,9 @@ const CreateDialog = (props: {
       return;
     }
 
-    const selectedDate = dayjs().isoWeekday(props.dayIndex + 1);
+    const selectedDate = dayjs(props.firstDayOfTheWeek).isoWeekday(
+      props.dayIndex + 1
+    );
 
     const finalStartAt = selectedDate
       .hour(startAt!.hour())
@@ -54,36 +57,6 @@ const CreateDialog = (props: {
     try {
       await calendarClient.createEvent(newEvent);
       await props.onCreateEventCard();
-      Swal.fire('Event is created!');
-    } catch (error) {
-      console.error('Failed to submit:', error);
-    }
-    handleClose();
-  };
-
-  const handleSubmit = async () => {
-    if (isInvalid(startAt, endAt, eventText)) {
-      return;
-    }
-
-    const selectedDate = dayjs(props.firstDayOfTheWeek).isoWeekday(props.dayIndex + 1);
-
-    const finalStartAt = selectedDate
-      .hour(startAt!.hour())
-      .minute(startAt!.minute());
-
-    const finalEndAt = selectedDate.hour(endAt!.hour()).minute(endAt!.minute());
-
-    const newEvent = {
-      userId: uuidv4(),
-      startAt: finalStartAt.toDate(),
-      endAt: finalEndAt.toDate(),
-      eventText: eventText,
-    };
-
-    try {
-      await calendarClient.createEvent(newEvent);
-      await props.createEventCard();
       Swal.fire('Event is created!');
     } catch (error) {
       console.error('Failed to submit:', error);

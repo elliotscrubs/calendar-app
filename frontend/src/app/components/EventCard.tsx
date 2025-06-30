@@ -7,13 +7,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import Swal from 'sweetalert2';
 import UpdateDialog from './UpdateDialog';
 import CreateIcon from '@mui/icons-material/Create';
-import dayjs from '../utils/dayjs'; 
+import dayjs from '../utils/dayjs';
 
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 const EventCard = (props: {
   event: Event;
-  reloadEvents: () => void | Promise<void>;
+  onDeleteEventCard: () => void | Promise<void>;
+  onUpdateEventCard: () => void | Promise<void>;
 }) => {
   const [openUpdate, setOpenUpdate] = React.useState(false);
 
@@ -39,7 +40,7 @@ const EventCard = (props: {
     if (confirmationResult.isConfirmed) {
       try {
         await calendarClient.deleteEvent(props.event.id);
-        await props.reloadEvents();
+        await props.onDeleteEventCard();
         Swal.fire('Event deleted!');
       } catch (error) {
         console.error('An error occurred during the request.', error);
@@ -73,7 +74,7 @@ const EventCard = (props: {
       </IconButton>
       <UpdateDialog
         event={props.event}
-        onUpdateEventCard={props.deleteEventCard}
+        onUpdateEventCard={props.onUpdateEventCard}
         open={openUpdate}
         setOpen={setOpenUpdate}
       />

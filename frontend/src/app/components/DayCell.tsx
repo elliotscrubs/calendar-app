@@ -8,7 +8,8 @@ import dayjs from 'dayjs';
 const DayCell = (props: {
   index: number;
   events: ByDateResponse;
-  deleteEventCard: () => void | Promise<void>;
+  onDeleteEventCard: () => void | Promise<void>;
+  onUpdateEventCard: () => void | Promise<void>;
 }) => {
   const eventsList = useMemo(() => {
     return Object.keys(props.events)
@@ -24,7 +25,8 @@ const DayCell = (props: {
     <EventCard
       key={index}
       event={events}
-      deleteEventCard={props.deleteEventCard}
+      onDeleteEventCard={props.onDeleteEventCard}
+      onUpdateEventCard={props.onUpdateEventCard}
     />
   ));
 };
