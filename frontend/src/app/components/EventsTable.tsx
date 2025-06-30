@@ -108,6 +108,7 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
                     events={events}
                     onDeleteEventCard={loadData}
                     onUpdateEventCard={loadData}
+                    firstDayOfTheWeek={props.firstDayOfTheWeek}
                   />
                 </TableCell>
               ))}

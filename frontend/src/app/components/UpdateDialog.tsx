@@ -96,7 +96,6 @@ const UpdateDialog = (props: {
                 />
               </DemoContainer>
             </LocalizationProvider>
-
             <TextField
               required
               error={eventText.length < 5 || eventText.length > 200}

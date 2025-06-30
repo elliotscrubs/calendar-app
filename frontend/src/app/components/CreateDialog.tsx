@@ -28,6 +28,14 @@ const CreateDialog = (props: {
   const [endAt, setEndAt] = React.useState<Dayjs | null>(null);
   const [eventText, setEventText] = React.useState('');
 
+  React.useEffect(() => {
+    if (props.open) {
+      setStartAt(null);
+      setEndAt(null);
+      setEventText('');
+    }
+  }, [props.open]);
+
   const handleClose = () => {
     props.setOpen(false);
   };
@@ -37,10 +45,8 @@ const CreateDialog = (props: {
       return;
     }
 
-    const selectedDate = dayjs(props.firstDayOfTheWeek).isoWeekday(
-      props.dayIndex + 1
-    );
-
+    const selectedDate = dayjs(props.firstDayOfTheWeek).add(props.dayIndex, 'day');
+    
     const finalStartAt = selectedDate
       .hour(startAt!.hour())
       .minute(startAt!.minute());

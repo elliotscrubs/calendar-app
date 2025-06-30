@@ -6,7 +6,7 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import IconButton from '@mui/material/IconButton';
 import EventsTable from './components/EventsTable';
-import dayjs from './utils/dayjs'; 
+import dayjs from './utils/dayjs';
 
 const CurrentEventTable = () => {
   const [firstDayOfTheWeek, setFirstDayOfTheWeek] = useState<Dayjs>(
@@ -33,7 +33,7 @@ const CurrentEventTable = () => {
         style={{
           display: 'flex',
           alignItems: 'center',
-          color: 'grey', 
+          color: 'grey',
         }}>
         <IconButton onClick={steppingWeeksBack}>
           <ArrowBackIcon />
