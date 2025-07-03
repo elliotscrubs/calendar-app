@@ -14,18 +14,27 @@ import { Dayjs } from 'dayjs';
 import { calendarClient } from '../api/calendarClient';
 import { v4 as uuidv4 } from 'uuid';
 import Swal from 'sweetalert2';
-import { isInvalid } from '../utils/isInValid';
-import dayjs from '../utils/dayjs'; 
+import { isInvalid } from '../utils/isInvalid';
+import dayjs from '../utils/dayjs';
 
 const CreateDialog = (props: {
   dayIndex: number;
+  firstDayOfTheWeek: Date;
   onCreateEventCard: () => void | Promise<void>;
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [startAt, setStartAt] = React.useState<Dayjs | null>(null);
   const [endAt, setEndAt] = React.useState<Dayjs | null>(null);
-  const [eventText, setEventText] = React.useState('');  
+  const [eventText, setEventText] = React.useState('');
+
+  React.useEffect(() => {
+    if (props.open) {
+      setStartAt(null);
+      setEndAt(null);
+      setEventText('');
+    }
+  }, [props.open]);
 
   const handleClose = () => {
     props.setOpen(false);
@@ -36,8 +45,8 @@ const CreateDialog = (props: {
       return;
     }
 
-    const selectedDate = dayjs().isoWeekday(props.dayIndex + 1);
-
+    const selectedDate = dayjs(props.firstDayOfTheWeek).add(props.dayIndex, 'day');
+    
     const finalStartAt = selectedDate
       .hour(startAt!.hour())
       .minute(startAt!.minute());

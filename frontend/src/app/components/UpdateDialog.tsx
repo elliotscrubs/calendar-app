@@ -13,7 +13,7 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { Box, Button, TextField } from '@mui/material';
 import { Dayjs } from 'dayjs';
 import Swal from 'sweetalert2';
-import { isInvalid } from '../utils/isInValid';
+import { isInvalid } from '../utils/isInvalid';
 import dayjs from '../utils/dayjs'; 
 
 const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -96,7 +96,6 @@ const UpdateDialog = (props: {
                 />
               </DemoContainer>
             </LocalizationProvider>
-
             <TextField
               required
               error={eventText.length < 5 || eventText.length > 200}
