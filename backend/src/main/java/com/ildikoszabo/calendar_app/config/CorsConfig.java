@@ -1,7 +1,8 @@
-package com.ildikoszabo.calendar_app;
+package com.ildikoszabo.calendar_app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -21,3 +22,5 @@ public class CorsConfig {
 		};
 	}
 }
+
+
