@@ -1,10 +1,10 @@
 package com.ildikoszabo.calendar_app.service;
 
+import com.ildikoszabo.calendar_app.dto.EventRequestDto;
 import com.ildikoszabo.calendar_app.entity.Event;
 import com.ildikoszabo.calendar_app.repository.EventRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
@@ -24,10 +24,13 @@ public class EventServiceImplements implements EventService {
 
 
 	@Override
+	public Event save(EventRequestDto theEvent, UUID userId) {
+		Event newEvent = new Event(theEvent, userId);
+		return eventRepository.save(newEvent);
+	}
+
+	@Override
 	public Event save(Event theEvent) {
-		if (theEvent.getUserId() == null) {
-			theEvent.setUserId(UUID.randomUUID());
-		}
 		return eventRepository.save(theEvent);
 	}
 
