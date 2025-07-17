@@ -26,5 +26,4 @@ public class JwtService {
 		return jwtEncoder.encode(JwtEncoderParameters.from(claimsSet))
 				.getTokenValue();
 	}
-
 }

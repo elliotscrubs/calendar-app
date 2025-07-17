@@ -24,5 +24,4 @@ public class UserRegistrationMapper {
 		return new RegistrationResponseDto(
 				user.getEmail(), user.getUsername());
 	}
-
 }

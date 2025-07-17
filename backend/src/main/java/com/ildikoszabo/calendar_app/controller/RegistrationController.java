@@ -32,5 +32,4 @@ public class RegistrationController {
 				userRegistrationMapper.toRegistrationResponseDto(registeredUser)
 		);
 	}
-
 }

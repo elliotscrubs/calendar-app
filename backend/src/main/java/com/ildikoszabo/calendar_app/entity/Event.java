@@ -3,7 +3,6 @@ package com.ildikoszabo.calendar_app.entity;
 import com.ildikoszabo.calendar_app.dto.EventRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 

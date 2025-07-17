@@ -37,5 +37,4 @@ public class User {
 	@Column(name = "updated_at")
 	@LastModifiedDate
 	private Instant updatedAt;
-
 }
