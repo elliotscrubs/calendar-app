@@ -1,8 +1,8 @@
 package com.ildikoszabo.calendar_app.entity;
 
+import com.ildikoszabo.calendar_app.dto.EventRequestDto;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -30,6 +30,13 @@ public class Event {
 
 	public Event() {
 
+	}
+
+	public Event(EventRequestDto eventRequestDto, UUID userId) {
+		this.userId = userId;
+		this.startAt = eventRequestDto.startAt();
+		this.endAt = eventRequestDto.endAt();
+		this.eventText = eventRequestDto.eventText();
 	}
 
 	public Event(UUID id, UUID userId, LocalDateTime startAt, LocalDateTime endAt, String eventText) {

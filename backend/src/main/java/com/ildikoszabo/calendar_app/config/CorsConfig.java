@@ -1,4 +1,4 @@
-package com.ildikoszabo.calendar_app;
+package com.ildikoszabo.calendar_app.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
