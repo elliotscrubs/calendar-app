@@ -31,6 +31,16 @@ export interface RegisterResponse {
   email: string;
 }
 
+export interface LoginRequest {
+  email: string, 
+  password: string
+}
+
+export interface LoginResponse {
+  email: string, 
+  password: string
+}
+
 function formatDate(date: Date): string {
   const offset = date.getTimezoneOffset();
   const offsetApplied = new Date(date.getTime() - offset * 60 * 1000);
@@ -88,11 +98,10 @@ class CalendarClient {
     return response.data;
   }
 
-  async login(email: string, password: string): Promise<string> {
-    const response = await this.axiosInstance.post('/api/auth/login', {
-      email,
-      password,
-    });
+  async login(data: LoginRequest): Promise<LoginResponse> {
+    const response = await this.axiosInstance.post('/api/auth/login', 
+      data
+    );
     return response.data.token;
   }
 }
