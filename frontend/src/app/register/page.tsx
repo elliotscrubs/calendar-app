@@ -1,22 +1,31 @@
 'use client';
 
 import { useState } from 'react';
-import { calendarClient } from '../api/calendarClient';
+import { userClient } from '../api/userClient';
 import { useRouter } from 'next/navigation';
-import { Avatar, Box, Button, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  TextField,
+  Typography,
+} from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
 import NextLink from 'next/link';
 import Link from '@mui/material/Link';
+import { AxiosError } from 'axios';
 
 export default function RegisterPage() {
   const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage('');
 
     const registerRequest = {
       username: name,
@@ -25,12 +34,23 @@ export default function RegisterPage() {
     };
 
     try {
-      await calendarClient.register(registerRequest);
-      setError('');
-      router.push('/');
+      await userClient.register(registerRequest);
+      router.push('/login');
     } catch (error) {
-      console.error(error);
-      setError('Registration failed.');
+      const axiosError = error as AxiosError<{ message?: string }>;
+      if (axiosError.response) {
+        if (axiosError.response.status === 409) {
+          setErrorMessage(
+            axiosError.response.data?.message ||
+              'Email or username already exists.'
+          );
+        } else {
+          setErrorMessage(
+            axiosError.response.data?.message ||
+              'Email or username already exists.'
+          );
+        }
+      }
     }
   };
 
@@ -69,8 +89,17 @@ export default function RegisterPage() {
               <LockOutlined />
             </Avatar>
             <Typography variant='h5'>Sign Up</Typography>
+
+            {errorMessage && (
+              <Alert severity='error' sx={{ mb: 2, width: '100%' }}>
+                {errorMessage}
+              </Alert>
+            )}
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <Box
+            component='form'
+            onSubmit={handleSubmit}
+            sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
               name='name'
               required
@@ -145,7 +174,6 @@ export default function RegisterPage() {
               sx={{ mt: 3, backgroundColor: '#247d08ff' }}
               onClick={handleSubmit}>
               Sign Up
-              {error && <p style={{ color: 'red' }}>{error}</p>}
             </Button>
             <Typography variant='body2' align='center' sx={{ mt: 2 }}>
               Already have an account?{' '}

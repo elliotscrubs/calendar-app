@@ -1,32 +1,52 @@
 'use client';
 
 import { useState } from 'react';
-import { calendarClient } from '../api/calendarClient';
+import { userClient } from '../api/userClient';
 import { useRouter } from 'next/navigation';
-import { Avatar, Box, Button, TextField, Typography } from '@mui/material';
+import {
+  Alert,
+  Avatar,
+  Box,
+  Button,
+  Link,
+  TextField,
+  Typography,
+} from '@mui/material';
+import NextLink from 'next/link';
 import { LockOutlined } from '@mui/icons-material';
+import { AxiosError } from 'axios';
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState('');
+  const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMessage('');
 
     const loginRequest = {
-      email: email,
+      username: username,
       password: password,
     };
 
     try {
-      await calendarClient.login(loginRequest);
-      setError('');
+      await userClient.login(loginRequest);
       router.push('/');
     } catch (error) {
-      console.error(error);
-      setError('Login failed.');
+      const axiosError = error as AxiosError<{ message?: string }>;
+      if (axiosError.response) {
+        if (axiosError.response.status === 409) {
+          setErrorMessage(
+            axiosError.response.data?.message || 'Wrong email or password.'
+          );
+        } else {
+          setErrorMessage(
+            axiosError.response.data?.message || 'Wrong email or password.'
+          );
+        }
+      }
     }
   };
 
@@ -65,6 +85,12 @@ export default function LoginPage() {
               <LockOutlined />
             </Avatar>
             <Typography variant='h5'>Log in</Typography>
+
+            {errorMessage && (
+              <Alert severity='error' sx={{ mb: 2, width: '100%' }}>
+                {errorMessage}
+              </Alert>
+            )}
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
             <TextField
@@ -85,10 +111,9 @@ export default function LoginPage() {
                 },
               }}
               autoFocus
-              placeholder='Email'
-              name='email'
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              placeholder='Username'
+              value={username}
+              onChange={e => setUserName(e.target.value)}
             />
             <TextField
               required
@@ -119,9 +144,17 @@ export default function LoginPage() {
               variant='contained'
               sx={{ mt: 3, backgroundColor: '#247d08ff' }}
               onClick={handleSubmit}>
-              Sign Up
-              {error && <p style={{ color: 'red' }}>{error}</p>}
+              Log In
             </Button>
+            <Typography variant='body2' align='center' sx={{ mt: 2 }}>
+              Do not have an account?{' '}
+              <Link
+                sx={{ color: '#247d08ff' }}
+                component={NextLink}
+                href='/register'>
+                Register
+              </Link>
+            </Typography>
           </Box>
         </Box>
       </Box>

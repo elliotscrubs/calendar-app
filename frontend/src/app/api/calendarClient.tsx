@@ -20,27 +20,6 @@ export interface Event {
 export type ByDateResponse = Record<string, Event[]>;
 // Date format = "yyyy-MM-dd";
 
-export interface RegisterRequest {
-  username: string;
-  email: string;
-  password: string;
-}
-
-export interface RegisterResponse {
-  username: string;
-  email: string;
-}
-
-export interface LoginRequest {
-  email: string, 
-  password: string
-}
-
-export interface LoginResponse {
-  email: string, 
-  password: string
-}
-
 function formatDate(date: Date): string {
   const offset = date.getTimezoneOffset();
   const offsetApplied = new Date(date.getTime() - offset * 60 * 1000);
@@ -88,22 +67,7 @@ class CalendarClient {
       data
     );
     return response.data;
-  }
-
-  async register(data: RegisterRequest): Promise<RegisterResponse> {
-    const response = await this.axiosInstance.post<RegisterResponse>(
-      '/api/auth/register',
-      data
-    );
-    return response.data;
-  }
-
-  async login(data: LoginRequest): Promise<LoginResponse> {
-    const response = await this.axiosInstance.post('/api/auth/login', 
-      data
-    );
-    return response.data.token;
-  }
+  }  
 }
 
 export const calendarClient = new CalendarClient('http://localhost:9090');
