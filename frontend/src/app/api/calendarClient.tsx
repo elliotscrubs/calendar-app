@@ -66,11 +66,6 @@ class CalendarClient {
   }
 
   async deleteEvent(id: UUID): Promise<void> {
-    console.log('Deleting event id:', id);
-    console.log(
-      'Full URL:',
-      `${this.axiosInstance.defaults.baseURL}/events/${id}`
-    );
     await this.axiosInstance.delete<Event>(`/events/${id}`);
   }
 

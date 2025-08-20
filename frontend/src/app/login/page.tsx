@@ -3,18 +3,11 @@
 import { useState } from 'react';
 import { userClient } from '../api/userClient';
 import { useRouter } from 'next/navigation';
-import {
-  Alert,
-  Avatar,
-  Box,
-  Button,
-  Link,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Avatar, Box, Button, Link, Typography } from '@mui/material';
 import NextLink from 'next/link';
 import { LockOutlined } from '@mui/icons-material';
 import { AxiosError } from 'axios';
+import CustomTextField from '../components/CustomTextField';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -24,7 +17,6 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("➡️ handleSubmit lefutott", { username, password }); // 🔥
     setErrorMessage('');
 
     const loginRequest = {
@@ -35,18 +27,12 @@ export default function LoginPage() {
     try {
       await userClient.login(loginRequest);
       router.push('/');
-    } catch (error) {
-      const axiosError = error as AxiosError<{ message?: string }>;
-      if (axiosError.response) {
-        if (axiosError.response.status === 409) {
-          setErrorMessage(
-            axiosError.response.data?.message || 'Wrong name or password.'
-          );
-        } else {
-          setErrorMessage(
-            axiosError.response.data?.message || 'Wrong name or password.'
-          );
-        }
+    } catch (err) {
+      const error = err as AxiosError<{ message?: string }>;
+      if (error.response?.data?.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('Wrong name or password. Please try again.');
       }
     }
   };
@@ -94,46 +80,20 @@ export default function LoginPage() {
             )}
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <TextField
+            <form
+              onSubmit={handleSubmit}
+              style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <CustomTextField
                 required
                 fullWidth
-                sx={{
-                  width: 350,
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: '#247d08ff',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: '#247d08ff',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#247d08ff',
-                    },
-                  },
-                }}
                 autoFocus
                 placeholder='Username'
                 value={username}
                 onChange={e => setUserName(e.target.value)}
               />
-              <TextField
+              <CustomTextField
                 required
                 fullWidth
-                sx={{
-                  width: 350,
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': {
-                      borderColor: '#247d08ff',
-                    },
-                    '&:hover fieldset': {
-                      borderColor: '#247d08ff',
-                    },
-                    '&.Mui-focused fieldset': {
-                      borderColor: '#247d08ff',
-                    },
-                  },
-                }}
                 name='password'
                 type='password'
                 placeholder='Password'
@@ -141,7 +101,7 @@ export default function LoginPage() {
                 onChange={e => setPassword(e.target.value)}
               />
               <Button
-              type="submit"
+                type='submit'
                 fullWidth
                 variant='contained'
                 sx={{ mt: 3, backgroundColor: '#247d08ff' }}>

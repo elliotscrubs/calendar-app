@@ -3,18 +3,12 @@
 import { useState } from 'react';
 import { userClient } from '../api/userClient';
 import { useRouter } from 'next/navigation';
-import {
-  Alert,
-  Avatar,
-  Box,
-  Button,
-  TextField,
-  Typography,
-} from '@mui/material';
+import { Alert, Avatar, Box, Button, Typography } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
 import NextLink from 'next/link';
 import Link from '@mui/material/Link';
 import { AxiosError } from 'axios';
+import CustomTextField from '../components/CustomTextField';
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -36,20 +30,12 @@ export default function RegisterPage() {
     try {
       await userClient.register(registerRequest);
       router.push('/login');
-    } catch (error) {
-      const axiosError = error as AxiosError<{ message?: string }>;
-      if (axiosError.response) {
-        if (axiosError.response.status === 409) {
-          setErrorMessage(
-            axiosError.response.data?.message ||
-              'Email or username already exists.'
-          );
-        } else {
-          setErrorMessage(
-            axiosError.response.data?.message ||
-              'Email or username already exists.'
-          );
-        }
+    } catch (err) {
+      const error = err as AxiosError<{ message?: string }>;
+      if (error.response?.data?.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('Email or username already exists.');
       }
     }
   };
@@ -100,71 +86,29 @@ export default function RegisterPage() {
             component='form'
             onSubmit={handleSubmit}
             sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField
+            <CustomTextField
               name='name'
               required
               placeholder='Name'
               fullWidth
-              sx={{
-                width: 350,
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                },
-              }}
               autoFocus
               value={name}
               onChange={e => setName(e.target.value)}
             />
-            <TextField
+            <CustomTextField
               required
               fullWidth
               placeholder='Email'
               name='email'
               value={email}
-              sx={{
-                width: 350,
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                },
-              }}
               onChange={e => setEmail(e.target.value)}
             />
-            <TextField
+            <CustomTextField
               required
               fullWidth
               name='password'
               type='password'
               placeholder='Password'
-              sx={{
-                width: 350,
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                },
-              }}
               value={password}
               onChange={e => setPassword(e.target.value)}
             />
