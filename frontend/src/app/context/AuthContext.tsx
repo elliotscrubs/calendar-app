@@ -12,7 +12,6 @@ import { userClient, LoginRequest, RegisterRequest } from '../api/userClient';
 
 type User = {
   username: string;
-  email: string;
 };
 
 type AuthContextType = {
@@ -36,7 +35,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       const savedToken = localStorage.getItem('accessToken');
       if (savedToken) {
         setToken(savedToken);
-        userClient.setAuthToken(savedToken);
         try {
           await fetchUser();
         } catch (err) {
@@ -59,15 +57,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   const login = async (data: LoginRequest) => {
-     try {
-    const response = await userClient.login(data);
-    setToken(response.token);
-    userClient.setAuthToken(response.token);
-    await fetchUser();
-    router.push('/');
-     } catch (err) {
-    console.error("Login failed", err)
-     }
+    try {
+      const response = await userClient.login(data);
+      localStorage.setItem('accessToken', response.token);
+      setToken(response.token);
+      await fetchUser();
+      router.push('/');
+    } catch (err) {
+      console.error('Login failed', err);
+    }
   };
 
   const register = async (data: RegisterRequest) => {
@@ -78,7 +76,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const logout = () => {
     setToken(null);
     setUser(null);
-    userClient.setAuthToken(null);
+    localStorage.removeItem('accessToken');
     router.push('/login');
   };
 

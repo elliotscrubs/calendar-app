@@ -24,6 +24,7 @@ export default function LoginPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log("➡️ handleSubmit lefutott", { username, password }); // 🔥
     setErrorMessage('');
 
     const loginRequest = {
@@ -39,11 +40,11 @@ export default function LoginPage() {
       if (axiosError.response) {
         if (axiosError.response.status === 409) {
           setErrorMessage(
-            axiosError.response.data?.message || 'Wrong email or password.'
+            axiosError.response.data?.message || 'Wrong name or password.'
           );
         } else {
           setErrorMessage(
-            axiosError.response.data?.message || 'Wrong email or password.'
+            axiosError.response.data?.message || 'Wrong name or password.'
           );
         }
       }
@@ -93,59 +94,60 @@ export default function LoginPage() {
             )}
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <TextField
-              required
-              fullWidth
-              sx={{
-                width: 350,
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#247d08ff',
+            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+              <TextField
+                required
+                fullWidth
+                sx={{
+                  width: 350,
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#247d08ff',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#247d08ff',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#247d08ff',
+                    },
                   },
-                  '&:hover fieldset': {
-                    borderColor: '#247d08ff',
+                }}
+                autoFocus
+                placeholder='Username'
+                value={username}
+                onChange={e => setUserName(e.target.value)}
+              />
+              <TextField
+                required
+                fullWidth
+                sx={{
+                  width: 350,
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#247d08ff',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: '#247d08ff',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#247d08ff',
+                    },
                   },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                },
-              }}
-              autoFocus
-              placeholder='Username'
-              value={username}
-              onChange={e => setUserName(e.target.value)}
-            />
-            <TextField
-              required
-              fullWidth
-              sx={{
-                width: 350,
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                  '&:hover fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#247d08ff',
-                  },
-                },
-              }}
-              autoFocus
-              name='password'
-              type='password'
-              placeholder='Password'
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-            />
-            <Button
-              fullWidth
-              variant='contained'
-              sx={{ mt: 3, backgroundColor: '#247d08ff' }}
-              onClick={handleSubmit}>
-              Log In
-            </Button>
+                }}
+                name='password'
+                type='password'
+                placeholder='Password'
+                value={password}
+                onChange={e => setPassword(e.target.value)}
+              />
+              <Button
+              type="submit"
+                fullWidth
+                variant='contained'
+                sx={{ mt: 3, backgroundColor: '#247d08ff' }}>
+                Log In
+              </Button>
+            </form>
             <Typography variant='body2' align='center' sx={{ mt: 2 }}>
               Do not have an account?{' '}
               <Link

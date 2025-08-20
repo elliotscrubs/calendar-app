@@ -22,7 +22,6 @@ export interface LoginResponse {
 
 type User = {
   username: string;
-  email: string;
 };
 
 class UserClient {
@@ -35,18 +34,14 @@ class UserClient {
         'Content-Type': 'application/json',
       },
     });
-  }
 
-  setAuthToken(token: string | null) {
-    if (token) {
-      this.axiosInstance.defaults.headers.common[
-        'Authorization'
-      ] = `Bearer ${token}`;
-      localStorage.setItem('accessToken', token);
-    } else {
-      delete this.axiosInstance.defaults.headers.common['Authorization'];
-      localStorage.removeItem('accessToken');
-    }
+    this.axiosInstance.interceptors.request.use(config => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+      return config;
+    });
   }
 
   async register(data: RegisterRequest): Promise<RegisterResponse> {
@@ -59,14 +54,18 @@ class UserClient {
 
   async login(data: LoginRequest): Promise<LoginResponse> {
     const response = await this.axiosInstance.post('/api/auth/login', data);
-    this.setAuthToken(response.data.token);
+
+    const token = response.data.token;
+    if (token) {
+      localStorage.setItem('accessToken', token);
+    }
     return response.data;
   }
 
   async getMe(): Promise<User> {
-  const response = await this.axiosInstance.get<User>('/api/user/me');
-  return response.data;
-}
+    const response = await this.axiosInstance.get<User>('/api/user/me');
+    return response.data;
+  }
 }
 
 export const userClient = new UserClient('http://localhost:9090/');

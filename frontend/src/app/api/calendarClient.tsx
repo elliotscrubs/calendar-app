@@ -36,6 +36,14 @@ class CalendarClient {
         'Content-Type': 'application/json',
       },
     });
+
+    this.axiosInstance.interceptors.request.use(config => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+      return config;
+    });
   }
 
   async getEvents(userId: UUID, fromDate: Date, toDate: Date) {
@@ -43,7 +51,7 @@ class CalendarClient {
       '/events/byDate',
       {
         params: {
-          userId: userId,
+          userId,
           fromDate: formatDate(fromDate),
           toDate: formatDate(toDate),
         },
@@ -58,6 +66,11 @@ class CalendarClient {
   }
 
   async deleteEvent(id: UUID): Promise<void> {
+    console.log('Deleting event id:', id);
+    console.log(
+      'Full URL:',
+      `${this.axiosInstance.defaults.baseURL}/events/${id}`
+    );
     await this.axiosInstance.delete<Event>(`/events/${id}`);
   }
 
@@ -67,7 +80,7 @@ class CalendarClient {
       data
     );
     return response.data;
-  }  
+  }
 }
 
 export const calendarClient = new CalendarClient('http://localhost:9090');
