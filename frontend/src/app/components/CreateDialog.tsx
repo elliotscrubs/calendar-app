@@ -45,8 +45,11 @@ const CreateDialog = (props: {
       return;
     }
 
-    const selectedDate = dayjs(props.firstDayOfTheWeek).add(props.dayIndex, 'day');
-    
+    const selectedDate = dayjs(props.firstDayOfTheWeek).add(
+      props.dayIndex,
+      'day'
+    );
+
     const finalStartAt = selectedDate
       .hour(startAt!.hour())
       .minute(startAt!.minute());
@@ -81,12 +84,23 @@ const CreateDialog = (props: {
               border: 2,
               width: '32ch',
               borderRadius: '5px',
-              borderColor: 'blue',
+              borderColor: '#247d08ff',
             }}>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer
                 components={['TimePicker']}
-                sx={{ m: 1, width: '30ch' }}>
+                sx={{
+                  m: 1,
+                  width: '30ch',
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#247d08ff',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#247d08ff',
+                    },
+                  },
+                }}>
                 <TimePicker
                   label='Event Start'
                   value={startAt}
@@ -97,7 +111,18 @@ const CreateDialog = (props: {
               </DemoContainer>
               <DemoContainer
                 components={['TimePicker']}
-                sx={{ m: 1, width: '30ch' }}>
+                sx={{
+                  m: 1,
+                  width: '30ch',
+                  '& .MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: '#247d08ff',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: '#247d08ff',
+                    },
+                  },
+                }}>
                 <TimePicker
                   label='Event End'
                   value={endAt}
@@ -113,10 +138,20 @@ const CreateDialog = (props: {
               helperText={eventText.length ? 'min 5, max 200' : ''}
               slotProps={{ htmlInput: { maxLength: 200 } }}
               label='Event Text'
-              variant='outlined'
               value={eventText}
               onChange={e => setEventText(e.target.value)}
-              sx={{ m: 1, width: '30ch' }}
+              sx={{
+                m: 1,
+                width: '30ch',
+                '& .MuiOutlinedInput-root': {
+                  '& fieldset': {
+                    borderColor: '#247d08ff',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#247d08ff',
+                  },
+                },
+              }}
             />
           </Box>
         </DialogContent>
@@ -128,8 +163,7 @@ const CreateDialog = (props: {
               border: 2,
               width: '30ch',
               borderRadius: '5px',
-              borderColor: 'blue',
-              backgroundColor: 'blue',
+              backgroundColor: '#247d08ff',
               color: 'white',
             }}>
             Save event

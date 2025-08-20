@@ -36,6 +36,14 @@ class CalendarClient {
         'Content-Type': 'application/json',
       },
     });
+
+    this.axiosInstance.interceptors.request.use(config => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        config.headers['Authorization'] = `Bearer ${token}`;
+      }
+      return config;
+    });
   }
 
   async getEvents(userId: UUID, fromDate: Date, toDate: Date) {
@@ -43,7 +51,7 @@ class CalendarClient {
       '/events/byDate',
       {
         params: {
-          userId: userId,
+          userId,
           fromDate: formatDate(fromDate),
           toDate: formatDate(toDate),
         },

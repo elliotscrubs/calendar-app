@@ -29,7 +29,7 @@ const weekdays = [
 const cellStyle = {
   fontWeight: 'bold',
   color: 'white',
-  backgroundColor: '#1976d2',
+  backgroundColor: '#72ac60ff',
   borderRight: '1px solid white',
 };
 
@@ -78,7 +78,6 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
                   {day}
                   <Fab
                     size='small'
-                    color='primary'
                     aria-label='add'
                     sx={{ width: 36, height: 30, ml: 5 }}
                     onClick={() => {
