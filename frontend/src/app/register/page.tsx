@@ -31,11 +31,23 @@ export default function RegisterPage() {
       await userClient.register(registerRequest);
       router.push('/login');
     } catch (err) {
-      const error = err as AxiosError<{ message?: string }>;
-      if (error.response?.data?.message) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage('Email or username already exists.');
+      const error = err as AxiosError<{
+        username: string;
+        email: string;
+        message: string;
+      }>;
+      if (error.response?.data) {
+        const data = error.response.data;
+
+        if (typeof data === 'string') {
+          setErrorMessage(data);
+        } else if (data.email) {
+          setErrorMessage(data.email);
+        } else if (data.username) {
+          setErrorMessage(data.username);
+        } else if (data.message) {
+          setErrorMessage(data.message);
+        }
       }
     }
   };
@@ -100,6 +112,7 @@ export default function RegisterPage() {
               fullWidth
               placeholder='Email'
               name='email'
+              type='email'
               value={email}
               onChange={e => setEmail(e.target.value)}
             />
