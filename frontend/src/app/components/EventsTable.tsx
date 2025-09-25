@@ -11,10 +11,12 @@ import {
   TableRow,
   Paper,
   Fab,
+  Button,
 } from '@mui/material';
 import DayCell from '../components/DayCell';
 import CreateDialog from '../components/CreateDialog';
 import AddIcon from '@mui/icons-material/Add';
+import { useRouter } from 'next/navigation';
 
 const weekdays = [
   'Monday',
@@ -37,6 +39,7 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
   const [events, setEvents] = useState<ByDateResponse>({});
   const [openCreate, setOpenCreate] = React.useState(false);
   const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     loadData();
@@ -124,6 +127,20 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
           firstDayOfTheWeek={props.firstDayOfTheWeek}
         />
       )}
+      <Button
+        type='submit'
+        variant='contained'
+        sx={{ mt: 3, backgroundColor: '#247d08ff' }}
+        onClick={() => {
+          console.log(
+            new Date().toISOString() +
+              ' toroltuk a tokent a local storageben az Events tablebol!'
+          );
+          localStorage.removeItem('accessToken');
+          router.push('/login');
+        }}>
+        Log out
+      </Button>
     </>
   );
 };

@@ -54,7 +54,6 @@ class UserClient {
 
   async login(data: LoginRequest): Promise<LoginResponse> {
     const response = await this.axiosInstance.post('/api/auth/login', data);
-
     const token = response.data.token;
     if (token) {
       localStorage.setItem('accessToken', token);

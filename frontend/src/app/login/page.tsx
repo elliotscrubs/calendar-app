@@ -1,15 +1,16 @@
 'use client';
 
 import { useState } from 'react';
-import { userClient } from '../api/userClient';
 import { useRouter } from 'next/navigation';
 import { Alert, Avatar, Box, Button, Link, Typography } from '@mui/material';
 import NextLink from 'next/link';
 import { LockOutlined } from '@mui/icons-material';
 import { AxiosError } from 'axios';
 import CustomTextField from '../components/CustomTextField';
+import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
+  const { login } = useAuth();
   const router = useRouter();
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
@@ -25,7 +26,7 @@ export default function LoginPage() {
     };
 
     try {
-      await userClient.login(loginRequest);
+      login(loginRequest);
       router.push('/');
     } catch (err) {
       const error = err as AxiosError<{ message?: string }>;
