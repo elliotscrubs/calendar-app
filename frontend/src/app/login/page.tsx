@@ -1,17 +1,14 @@
 'use client';
 
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { Alert, Avatar, Box, Button, Link, Typography } from '@mui/material';
 import NextLink from 'next/link';
 import { LockOutlined } from '@mui/icons-material';
-import { AxiosError } from 'axios';
 import CustomTextField from '../components/CustomTextField';
 import { useAuth } from '../context/AuthContext';
 
 export default function LoginPage() {
   const { login } = useAuth();
-  const router = useRouter();
   const [username, setUserName] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -25,17 +22,7 @@ export default function LoginPage() {
       password: password,
     };
 
-    try {
-      login(loginRequest);
-      router.push('/');
-    } catch (err) {
-      const error = err as AxiosError<{ message?: string }>;
-      if (error.response?.data?.message) {
-        setErrorMessage(error.response.data.message);
-      } else {
-        setErrorMessage('Wrong name or password. Please try again.');
-      }
-    }
+    login(loginRequest);
   };
 
   return (

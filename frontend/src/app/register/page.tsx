@@ -1,21 +1,20 @@
 'use client';
 
 import { useState } from 'react';
-import { userClient } from '../api/userClient';
-import { useRouter } from 'next/navigation';
 import { Alert, Avatar, Box, Button, Typography } from '@mui/material';
 import { LockOutlined } from '@mui/icons-material';
 import NextLink from 'next/link';
 import Link from '@mui/material/Link';
 import { AxiosError } from 'axios';
 import CustomTextField from '../components/CustomTextField';
+import { useAuth } from '../context/AuthContext';
 
 export default function RegisterPage() {
-  const router = useRouter();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const { register } = useAuth();  
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,8 +27,7 @@ export default function RegisterPage() {
     };
 
     try {
-      await userClient.register(registerRequest);
-      router.push('/login');
+      register(registerRequest);
     } catch (err) {
       const error = err as AxiosError<{
         username: string;

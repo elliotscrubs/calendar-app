@@ -16,7 +16,7 @@ import {
 import DayCell from '../components/DayCell';
 import CreateDialog from '../components/CreateDialog';
 import AddIcon from '@mui/icons-material/Add';
-import { useRouter } from 'next/navigation';
+import { useAuth } from '../context/AuthContext';
 
 const weekdays = [
   'Monday',
@@ -36,10 +36,10 @@ const cellStyle = {
 };
 
 const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
+  const { logout } = useAuth();  
   const [events, setEvents] = useState<ByDateResponse>({});
   const [openCreate, setOpenCreate] = React.useState(false);
   const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
-  const router = useRouter();
 
   useEffect(() => {
     loadData();
@@ -132,12 +132,7 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
         variant='contained'
         sx={{ mt: 3, backgroundColor: '#247d08ff' }}
         onClick={() => {
-          console.log(
-            new Date().toISOString() +
-              ' toroltuk a tokent a local storageben az Events tablebol!'
-          );
-          localStorage.removeItem('accessToken');
-          router.push('/login');
+          logout();
         }}>
         Log out
       </Button>
