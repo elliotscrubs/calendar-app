@@ -36,7 +36,7 @@ const cellStyle = {
 };
 
 const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
-  const { logout } = useAuth();  
+  const { logout } = useAuth();
   const [events, setEvents] = useState<ByDateResponse>({});
   const [openCreate, setOpenCreate] = React.useState(false);
   const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
@@ -130,7 +130,7 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
       <Button
         type='submit'
         variant='contained'
-        sx={{ mt: 3, backgroundColor: '#247d08ff' }}
+        sx={{ mt: 3, backgroundColor: '#72ac60ff' }}
         onClick={() => {
           logout();
         }}>

@@ -6,6 +6,7 @@ import NextLink from 'next/link';
 import { LockOutlined } from '@mui/icons-material';
 import CustomTextField from '../components/CustomTextField';
 import { useAuth } from '../context/AuthContext';
+import Footer from '../footer';
 
 export default function LoginPage() {
   const { login } = useAuth();
@@ -35,77 +36,92 @@ export default function LoginPage() {
           backgroundRepeat: 'repeat',
           backgroundSize: 'cover',
           display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
+          flexDirection: 'column',
         }}>
         <Box
           sx={{
-            p: 3,
-            border: '2px solid #247d08ff',
-            borderRadius: 2,
-            width: 400,
+            flex: 1,
             display: 'flex',
-            flexDirection: 'column',
+            justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: 'rgba(255, 255, 255, 0.9)',
           }}>
           <Box
             sx={{
+              p: 3,
+              border: '2px solid #247d08ff',
+              borderRadius: 2,
+              width: 400,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
-              mb: 2,
+              backgroundColor: 'rgba(255, 255, 255, 0.9)',
+              zIndex: 1,
             }}>
-            <Avatar sx={{ m: 2, bgcolor: '#247d08ff' }}>
-              <LockOutlined />
-            </Avatar>
-            <Typography variant='h5'>Log in</Typography>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                mb: 2,
+              }}>
+              <Avatar sx={{ m: 2, bgcolor: '#247d08ff' }}>
+                <LockOutlined />
+              </Avatar>
+              <Typography variant='h5'>Log in</Typography>
 
-            {errorMessage && (
-              <Alert severity='error' sx={{ mb: 2, width: '100%' }}>
-                {errorMessage}
-              </Alert>
-            )}
+              {errorMessage && (
+                <Alert severity='error' sx={{ mb: 2, width: '100%' }}>
+                  {errorMessage}
+                </Alert>
+              )}
+            </Box>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+              <form
+                onSubmit={handleSubmit}
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '16px',
+                }}>
+                <CustomTextField
+                  required
+                  fullWidth
+                  autoFocus
+                  placeholder='Username'
+                  value={username}
+                  onChange={e => setUserName(e.target.value)}
+                />
+                <CustomTextField
+                  required
+                  fullWidth
+                  name='password'
+                  type='password'
+                  placeholder='Password'
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                />
+                <Button
+                  type='submit'
+                  fullWidth
+                  variant='contained'
+                  sx={{ mt: 3, backgroundColor: '#247d08ff' }}>
+                  Log In
+                </Button>
+              </form>
+              <Typography variant='body2' align='center' sx={{ mt: 2 }}>
+                Do not have an account?{' '}
+                <Link
+                  sx={{ color: '#247d08ff' }}
+                  component={NextLink}
+                  href='/register'>
+                  Register
+                </Link>
+              </Typography>
+            </Box>
           </Box>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <form
-              onSubmit={handleSubmit}
-              style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-              <CustomTextField
-                required
-                fullWidth
-                autoFocus
-                placeholder='Username'
-                value={username}
-                onChange={e => setUserName(e.target.value)}
-              />
-              <CustomTextField
-                required
-                fullWidth
-                name='password'
-                type='password'
-                placeholder='Password'
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-              />
-              <Button
-                type='submit'
-                fullWidth
-                variant='contained'
-                sx={{ mt: 3, backgroundColor: '#247d08ff' }}>
-                Log In
-              </Button>
-            </form>
-            <Typography variant='body2' align='center' sx={{ mt: 2 }}>
-              Do not have an account?{' '}
-              <Link
-                sx={{ color: '#247d08ff' }}
-                component={NextLink}
-                href='/register'>
-                Register
-              </Link>
-            </Typography>
-          </Box>
+        </Box>
+        <Box sx={{ mb: 2, textAlign: 'center' }}>
+          <Footer />
         </Box>
       </Box>
     </>
