@@ -69,13 +69,15 @@ export default function RegisterPage() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            px: 2,
           }}>
           <Box
             sx={{
               p: 3,
               border: '2px solid #247d08ff',
               borderRadius: 2,
-              width: 400,
+              width: { xs: '100%', sm: 400 },
+              maxWidth: 400,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',

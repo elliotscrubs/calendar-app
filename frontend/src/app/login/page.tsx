@@ -44,13 +44,15 @@ export default function LoginPage() {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
+            px: 2
           }}>
           <Box
             sx={{
               p: 3,
               border: '2px solid #247d08ff',
               borderRadius: 2,
-              width: 400,
+              width: { xs: '100%', sm: 400 },
+              maxWidth: 400,
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
@@ -75,7 +77,7 @@ export default function LoginPage() {
                 </Alert>
               )}
             </Box>
-            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, width: '100%' }}>
               <form
                 onSubmit={handleSubmit}
                 style={{
