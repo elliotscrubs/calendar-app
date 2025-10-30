@@ -11,10 +11,14 @@ import {
   TableRow,
   Paper,
   Fab,
+  Button,
+  Box,
+  Typography,
 } from '@mui/material';
 import DayCell from '../components/DayCell';
 import CreateDialog from '../components/CreateDialog';
 import AddIcon from '@mui/icons-material/Add';
+import { useAuth } from '../context/AuthContext';
 
 const weekdays = [
   'Monday',
@@ -29,11 +33,12 @@ const weekdays = [
 const cellStyle = {
   fontWeight: 'bold',
   color: 'white',
-  backgroundColor: '#1976d2',
+  backgroundColor: '#72ac60ff',
   borderRight: '1px solid white',
 };
 
 const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
+  const { logout } = useAuth();
   const [events, setEvents] = useState<ByDateResponse>({});
   const [openCreate, setOpenCreate] = React.useState(false);
   const [selectedDayIndex, setSelectedDayIndex] = useState<number | null>(null);
@@ -56,9 +61,16 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
 
   return (
     <>
+      {/* Desktop */}
       <TableContainer
         component={Paper}
-        sx={{ maxWidth: 1600, margin: 'auto', borderRadius: 3, mt: 4 }}>
+        sx={{
+          maxWidth: 1600,
+          margin: 'auto',
+          borderRadius: 3,
+          mt: 4,
+          display: { xs: 'none', md: 'block' },
+        }}>
         <Table>
           <TableHead>
             <TableRow>
@@ -78,9 +90,8 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
                   {day}
                   <Fab
                     size='small'
-                    color='primary'
                     aria-label='add'
-                    sx={{ width: 36, height: 30, ml: 5 }}
+                    sx={{ width: 36, height: 30, ml: 2 }}
                     onClick={() => {
                       setSelectedDayIndex(index);
                       setOpenCreate(true);
@@ -93,7 +104,7 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
           </TableHead>
           <TableBody>
             <TableRow>
-              {weekdays.map((dayName, index) => (
+              {weekdays.map((day, index) => (
                 <TableCell
                   key={index}
                   align='center'
@@ -116,15 +127,80 @@ const EventsTable = (props: { firstDayOfTheWeek: Date }) => {
           </TableBody>
         </Table>
       </TableContainer>
-      {selectedDayIndex !== null && (
-        <CreateDialog
-          dayIndex={selectedDayIndex}
-          onCreateEventCard={loadData}
-          open={openCreate}
-          setOpen={setOpenCreate}
-          firstDayOfTheWeek={props.firstDayOfTheWeek}
-        />
-      )}
+
+      {/* Mobil */}
+      <Box
+        sx={{
+          display: { xs: 'flex', md: 'none' },
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          px: 2,
+          pt: 2,
+          minHeight: '100vh,',
+          backgroundImage: 'url("/calendar-background.svg")',
+          backgroundRepeat: 'repeat',
+          backgroundSize: 'cover',
+          pb: 2,
+        }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          {weekdays.map((day, index) => (
+            <Paper key={day} sx={{ p: 0 }}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  mb: 1,
+                  px: 2,
+                  py: 1,
+                  backgroundColor: '#72ac60ff',
+                  color: 'white',
+                  borderRadius: 1,
+                }}>
+                <Typography fontWeight='bold'>{day}</Typography>
+                <Fab
+                  size='small'
+                  aria-label='add'
+                  onClick={() => {
+                    setSelectedDayIndex(index);
+                    setOpenCreate(true);
+                  }}>
+                  <AddIcon />
+                </Fab>
+              </Box>
+              <Box sx={{ px: 2, py: 1 }}>
+                <DayCell
+                  index={index}
+                  events={events}
+                  onDeleteEventCard={loadData}
+                  onUpdateEventCard={loadData}
+                  firstDayOfTheWeek={props.firstDayOfTheWeek}
+                />
+              </Box>
+            </Paper>
+          ))}
+        </Box>
+        {selectedDayIndex !== null && (
+          <CreateDialog
+            dayIndex={selectedDayIndex}
+            onCreateEventCard={loadData}
+            open={openCreate}
+            setOpen={setOpenCreate}
+            firstDayOfTheWeek={props.firstDayOfTheWeek}
+          />
+        )}
+        <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+          <Button
+            type='submit'
+            variant='contained'
+            sx={{ mt: 2, backgroundColor: '#72ac60ff' }}
+            onClick={() => {
+              logout();
+            }}>
+            Log out
+          </Button>
+        </Box>
+      </Box>
     </>
   );
 };

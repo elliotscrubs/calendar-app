@@ -7,5 +7,7 @@ The application expects an RSA private key at `classpath:jwt/app.key` for signin
 You can generate the key using the following command:
 
 ```bash
+
 mkdir -p src/main/resources/jwt
 openssl genpkey -algorithm RSA -out src/main/resources/jwt/app.key -outform PEM
+```
