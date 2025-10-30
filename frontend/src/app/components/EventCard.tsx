@@ -57,6 +57,7 @@ const EventCard = (props: {
         borderRadius: 4,
         fontSize: '1rem',
         marginBottom: '7px',
+        paddingLeft: '8px',
       }}>
       {startTime} - {endTime}
       <IconButton

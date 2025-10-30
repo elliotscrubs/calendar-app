@@ -10,10 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
-import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
+import org.springframework.security.oauth2.core.OAuth2TokenValidator;
+import org.springframework.security.oauth2.jwt.*;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.time.Duration;
@@ -41,12 +39,17 @@ public class JwtConfig {
 
 	@Bean
 	public JwtDecoder jwtDecoder() {
-		return NimbusJwtDecoder.withPublicKey(publicKey).build();
+		String issuer = "calendar-app";
+		NimbusJwtDecoder jwtDecoder = NimbusJwtDecoder.withPublicKey(publicKey).build();
+		OAuth2TokenValidator<Jwt> withIssuer = JwtValidators.createDefaultWithIssuer(issuer);
+		jwtDecoder.setJwtValidator(withIssuer);
+
+		return jwtDecoder;
 	}
 
 	@Bean
 	public JwtService jwtService(
-			@Value("${spring.application.name}") final String appName,
+			@Value("${spring.application.name}") String appName,
 			final JwtEncoder jwtEncoder) {
 
 		return new JwtService(appName, ttl, jwtEncoder);

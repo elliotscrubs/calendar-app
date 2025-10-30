@@ -6,7 +6,6 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import jakarta.validation.ValidationException;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +19,7 @@ public class UserRegistrationService {
 		if (userRepository.existsByUsername(user.getUsername()) ||
 				userRepository.existsByEmail(user.getEmail())) {
 
-			throw new ValidationException("Username or Email already exists");
+			throw new IllegalArgumentException("Email already exists");
 		}
 
 		user.setPassword(passwordEncoder.encode(user.getPassword()));
