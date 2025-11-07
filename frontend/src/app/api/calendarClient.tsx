@@ -78,4 +78,4 @@ class CalendarClient {
   }
 }
 
-export const calendarClient = new CalendarClient('http://localhost:9090');
+export const calendarClient = new CalendarClient('https://mycalendarapp.eu');

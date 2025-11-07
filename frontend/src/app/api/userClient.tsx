@@ -67,4 +67,4 @@ class UserClient {
   }
 }
 
-export const userClient = new UserClient('http://localhost:9090/');
+export const userClient = new UserClient('https://mycalendarapp.eu');
