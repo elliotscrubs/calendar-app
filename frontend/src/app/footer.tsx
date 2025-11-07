@@ -7,7 +7,7 @@ export default function Footer() {
       }}>
       Created by{' '}
       <a
-        href='https://elliotscrubs.github.io/'
+        href='https://www.linkedin.com/in/ildik%C3%B3-szab%C3%B3-80a488245/'
         style={{ color: '#247d08ff' }}
         target='_blank'>
         Ildiko Szabo
