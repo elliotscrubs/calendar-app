@@ -22,6 +22,7 @@ public class JpaUserDetailsService implements UserDetailsService {
 				User.builder()
 						.username(username)
 						.password(user.getPassword())
+                        .roles("USER")
 						.build()
 		).orElseThrow(() -> new UsernameNotFoundException(
 				"User with username [%s] not found".formatted(username)));
