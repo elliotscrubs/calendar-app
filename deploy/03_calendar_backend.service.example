@@ -1,0 +1,22 @@
+[Unit]
+Description=Calendar App Backend (Spring Boot)
+After=network.target mysql.service
+
+[Service]
+User=ubuntu
+WorkingDirectory=/home/ubuntu/app/calendar-app/backend
+ExecStart=/usr/bin/java -jar target/calendar-app-0.0.1-SNAPSHOT.jar
+Restart=always
+RestartSec=5
+
+Environment=SPRING_PROFILES_ACTIVE=prod
+Environment=DB_USER=your_db_user
+Environment=DB_PASSWORD=your_db_password
+Environment=DB_HOST=localhost
+Environment=DB_NAME=calendar
+
+[Install]
+WantedBy=multi-user.target
+
+MySQL database and user creation is done manually.
+Environment variables are configured in the backend systemd service.
