@@ -8,7 +8,9 @@ WorkingDirectory=/home/ubuntu/app/calendar-app/frontend
 ExecStart=/usr/bin/npm run start
 Restart=always
 RestartSec=5
-Environment=NODE_ENV=production
+StartLimitIntervalSec=300
+StartLimitBurst=5
+Environment=NODE_OPTIONS=--max_old_space_size=256
 
 [Install]
 WantedBy=multi-user.target

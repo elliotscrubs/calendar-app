@@ -5,9 +5,10 @@ After=network.target mysql.service
 [Service]
 User=ubuntu
 WorkingDirectory=/home/ubuntu/app/calendar-app/backend
-ExecStart=/usr/bin/java -jar target/calendar-app-0.0.1-SNAPSHOT.jar
-Restart=always
+ExecStart=/usr/bin/java -Xms128m -Xmx512m -jar /home/ubuntu/app/calendar-app/backend/target/calendar-app-0.0.1-SNAPSHOT.jarRestart=always
 RestartSec=5
+StartLimitIntervalSec=300
+StartLimitBurst=5
 
 Environment=SPRING_PROFILES_ACTIVE=prod
 Environment=DB_USER=your_db_user
